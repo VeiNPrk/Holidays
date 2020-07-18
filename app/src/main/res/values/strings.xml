@@ -13,5 +13,6 @@
     <string name="menu_celebration_religious">Православные праздники</string>
     <string name="menu_celebration_private">Личные</string>
 
+    <string name="no_first_connection">Для первоначальной загрузки необходимо интернет соединение!</string>
     <string name="home_second">Home Second</string>
 </resources>
