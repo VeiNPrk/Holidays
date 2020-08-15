@@ -4,37 +4,46 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import com.vnprk.holidays.utils.DateUtils
 import java.util.*
 
 @Entity
 class PrivateEvent(
-    @SerializedName("id")
-    @ColumnInfo(name = "id_private")
-    @PrimaryKey
-    override var idEvent: Int,
     @SerializedName("name")
-    @ColumnInfo(name = "name_private")
-    override var nameEvent: String,
+    override var name: String?,
     @SerializedName("description")
-    @ColumnInfo(name = "description_private")
-    override var descriptEvent: String,
+    override var descript: String?,
     @SerializedName("img_link")
-    @ColumnInfo(name = "img_private")
-    override var imgEvent: String?,
+    override var img: String?,
     @SerializedName("type")
-    var type: Int,
-    @SerializedName("country")
-    var country: Int,
-    @SerializedName("day")
-    var day: Int?,
-    @SerializedName("month")
-    var month: Int?,
-    @SerializedName("day_of_year")
-    var dayOfYear: Int?,
-    @SerializedName("ordered")
-    var ordered: Int,
+    override var type: Int,
+    @SerializedName("start_date_time")
+    var startDateTime: Long,
+    @SerializedName("finish_date_time")
+    var finishDateTime: Long,
     @SerializedName("period")
-    var period: Int
-):Event(idEvent, nameEvent, descriptEvent, imgEvent){
+    var period: Int,
+    @SerializedName("notify_before")
+    var notifyBefore: Int,
+    @SerializedName("id_color")
+    var idColor: Int,
+    @SerializedName("is_active")
+    var isActive:Boolean = true
+):Event{
+    @SerializedName("id")
+    @PrimaryKey(autoGenerate = true)
+    override var id: Int = 0
+
+    fun getStrStartDate() = DateUtils.getStrDateFromMils(startDateTime)
+
+    fun getStrStartTime() = DateUtils.getStrTimeFromMils(startDateTime)
+
+    fun getStrFinishDate() = DateUtils.getStrDateFromMils(finishDateTime)
+
+    fun getStrFinishTime() = DateUtils.getStrTimeFromMils(finishDateTime)
+
+    fun getFullStrFinishDateTime()=
+        if(getStrStartDate()==getStrFinishDate()) getStrFinishTime()
+        else "${getStrFinishDate()} ${getStrFinishTime()}"
 
 }

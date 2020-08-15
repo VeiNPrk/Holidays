@@ -3,23 +3,30 @@ package com.vnprk.holidays.utils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.vnprk.holidays.models.AdapterItem
 import com.vnprk.holidays.models.Event
 import com.vnprk.holidays.models.Holiday
 import com.vnprk.holidays.models.PrivateEvent
 import com.vnprk.holidays.utils.ViewHolderFactory
 
 
-class EventsRecyclerAdapter(/*val maket:Int, val detailControlClickListener: ControlListClickListener*/) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class EventsRecyclerAdapter(val detailClickListener: EventDetailClickListener?, val moreClickListener: EventMoreClickListener?) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     //lateinit var context:Context
     //private lateinit var detailControlClickListener : DetailControlClickListener;
-    var data:List<Event> = ArrayList<Event>()
-    interface ControlListClickListener {
-        fun onClick(idDetail : Int)
+    var data:List<AdapterItem<Event>> = ArrayList<AdapterItem<Event>>()
+
+    interface EventDetailClickListener {
+        fun onDetailClick(idDetail : Int, type : Int)
         //void onDeleteClick(PictureClass picture);
     }
 
-    fun setDetailsData(details: List<Event>){
+    interface EventMoreClickListener {
+        fun onMoreClick(type : Int)
+        //void onDeleteClick(PictureClass picture);
+    }
+
+    fun setDetailsData(details: List<AdapterItem<Event>>){
         data=details
         notifyDataSetChanged()
     }
@@ -35,7 +42,7 @@ class EventsRecyclerAdapter(/*val maket:Int, val detailControlClickListener: Con
     }
 
     override fun onBindViewHolder(holder : RecyclerView.ViewHolder, i : Int ) {
-        (holder as Binder).bind(data.get(i)/*, detailControlClickListener*/)
+        (holder as Binder).bind(data.get(i), detailClickListener, moreClickListener)
          //val detail = data.get(i);
         /*holder.bind(data.get(i))
         holder.binding.root.setOnClickListener {
@@ -43,17 +50,21 @@ class EventsRecyclerAdapter(/*val maket:Int, val detailControlClickListener: Con
         }*/
     }
 
-    override fun getItemViewType(position: Int): Int = when {
-        data.get(position) is Holiday -> {
-            Event.HOLIDAY_TYPE;
-        }
-        data.get(position) is PrivateEvent -> {
-            Event.PRIVATE_TYPE;
-        }
-        else -> {
-            -1;
-        }
-    }
+    override fun getItemViewType(position: Int): Int =
+        if(data.get(position).viewType == TYPE_ITEM )
+            when {
+                data.get(position).value is Holiday -> {
+                    Event.HOLIDAY_TYPE;
+                }
+                data.get(position).value is PrivateEvent -> {
+                    Event.PRIVATE_TYPE;
+                }
+                else -> {
+                    -1;
+                }
+            }
+        else data.get(position).viewType
+
 
     /*protected abstract fun getLayoutId(position: Int, obj: Detail): Int*/
 
@@ -62,10 +73,15 @@ class EventsRecyclerAdapter(/*val maket:Int, val detailControlClickListener: Con
     }
 
     internal interface Binder {
-        fun bind(detailControl: Event/*, detailClickListener: ControlListClickListener*/)
+        fun bind(detailControl: AdapterItem<Event>, detailClickListener: EventDetailClickListener?, moreClickListener: EventMoreClickListener?)
     }
 
     override fun getItemCount() = data.size
+
+    companion object {
+        const val TYPE_ITEM = 0
+        const val TYPE_HEADER = 1
+    }
 
 
 }

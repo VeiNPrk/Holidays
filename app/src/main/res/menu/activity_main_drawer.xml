@@ -21,6 +21,10 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/menu_celebration_religious" />
         <item
+            android:id="@+id/nav_celebration_other"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_celebration_other" />
+        <item
             android:id="@+id/nav_celebration_private"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/menu_celebration_private" />

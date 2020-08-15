@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.vnprk.holidays.R
+import com.vnprk.holidays.databinding.RvHeaderMaketBinding
 import com.vnprk.holidays.databinding.RvHolidayMaketBinding
 import com.vnprk.holidays.databinding.RvPrivateMaketBinding
 import com.vnprk.holidays.models.Event
@@ -12,6 +13,11 @@ import com.vnprk.holidays.models.Event
 object ViewHolderFactory {
     fun create(inflater:LayoutInflater, parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
+            EventsRecyclerAdapter.TYPE_HEADER -> {
+                val binding: RvHeaderMaketBinding =
+                    DataBindingUtil.inflate(inflater, R.layout.rv_header_maket, parent, false)
+                HeaderViewHolder(binding)
+            }
             Event.HOLIDAY_TYPE -> {
                 val binding: RvHolidayMaketBinding =
                     DataBindingUtil.inflate(inflater, R.layout.rv_holiday_maket, parent, false)

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+        <import type="android.graphics.Color"/>
+        <import type="com.vnprk.holidays.utils.DateUtils" />
+        <variable
+            name="event"
+            type="com.vnprk.holidays.models.PrivateEvent" />
+        <variable
+                name="viewModel"
+                type="com.vnprk.holidays.viewmodels.PrivateEventViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+        <!-- Media -->
+        <!--<ImageView
+            android:id="@+id/imv_holiday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="120dp"
+            android:scaleType="fitCenter"
+            android:visibility="@{holiday.img==null ?View.GONE : View.VISIBLE }"
+            app:srcCompat="@drawable/ic_menu_camera" />-->
+
+        <!--<Spinner
+            android:id="@+id/spn_period"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:selectedItemPosition="@={viewModel.periodItemPosition}"/>-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_save_event"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Сохранить"
+            />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_name_event"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:hint="Введите заголовок"
+                android:inputType="text"
+                android:text="@={event.name}" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:id="@+id/tv_start_date_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{event.getStrStartDate}"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_start_time_event"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="01.01.2020" />
+
+                <TextView
+                    android:id="@+id/tv_start_time_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
+                    android:text="@{event.getStrStartTime}"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="12:12" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/linearLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:id="@+id/tv_finish_date_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{event.getStrFinishDate}"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_finish_time_event"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="01.01.2020" />
+
+                <TextView
+                    android:id="@+id/tv_finish_time_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
+                    android:text="@{event.getStrFinishTime}"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="12:53" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_period"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imv_holiday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@android:drawable/ic_menu_rotate" />
+
+                <TextView
+                    android:id="@+id/tv_name_period"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.periodNameValue}"
+                    android:textAppearance="?attr/textAppearanceHeadline6" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_notify_before"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imv_notify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@android:drawable/ic_popup_reminder" />
+
+                <TextView
+                    android:id="@+id/tv_name_notify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.notifyNameValue}"
+                    android:textAppearance="?attr/textAppearanceHeadline6" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imv_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="@{Color.parseColor(viewModel.colorNameValue)}"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:id="@+id/tv_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="Выберите цвет"
+                    android:textAppearance="?attr/textAppearanceHeadline6" />
+            </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tv_descript_holiday"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@={event.descript}"
+                        android:inputType="textMultiLine"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="?android:attr/textColorSecondary"
+                        tools:text="fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffsdf nn snhn hnfdjhsfnhndfhndfjjfds nn jn jndfhndf ndfndkndknd knkjn k nj ndk nknn j ndnkdndk dfndfhndhehnhoenhrenjrnjfdnjfn nj n n n jfn d nd njh nrenher nherne en en n n johnej nh hn" />
+                </LinearLayout>
+
+        </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</layout>

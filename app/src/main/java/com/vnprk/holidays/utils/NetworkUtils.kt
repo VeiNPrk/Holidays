@@ -4,12 +4,12 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import androidx.lifecycle.MutableLiveData
-import com.fmklab.fmkinp.NetworkState
+import com.vnprk.holidays.models.LoadingState
 
 class NetworkUtils(){
     companion object {
         const val ERROR_NO_CONNECTION = "error_no_connection"
-        val networkState = MutableLiveData<NetworkState>()
+        val networkState = MutableLiveData<LoadingState>()
 
         fun isNetworkAvailable(context:Context): Boolean {
             val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE)

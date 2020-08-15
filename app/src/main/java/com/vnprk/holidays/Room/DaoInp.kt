@@ -14,16 +14,43 @@ import com.vnprk.holidays.models.*
     /*@get:Query("SELECT * from signal ORDER BY time ASC")
     fun allSignalls: LiveData<List<UserClass>>*/
 
+    @Query("SELECT * FROM holiday where ((day=:day and month=:month) or dayOfYear=:dayOfYear) order by ordered")
+    abstract fun getAllHolidays(day:Int, month:Int, dayOfYear:Int): LiveData<List<Holiday>>
 
+    @Query("SELECT * FROM holiday WHERE type=:type and ((day=:day and month=:month) or dayOfYear=:dayOfYear) order by ordered")
+    abstract fun getHolidaysByType(type :Int, day:Int, month:Int, dayOfYear:Int): LiveData<List<Holiday>>
 
-    @Query("SELECT * FROM holiday WHERE type=:type")
-    abstract fun getHolidaysByType(type :Int): LiveData<List<Holiday>>
+    @Query("SELECT * FROM holiday WHERE id=:id")
+    abstract fun getHolidayById(id :Int): LiveData<Holiday>
 
-    @Query("SELECT * FROM holiday")
-    abstract fun getAllHolidays(): LiveData<List<Holiday>>
+    @Query("SELECT * FROM privateevent order by startDateTime")
+    abstract fun getAllPrivateEvents(): LiveData<List<PrivateEvent>>
 
+    @Query("SELECT * FROM privateevent WHERE id=:id")
+    abstract fun getPrivateEventById(id :Int): LiveData<PrivateEvent>
+
+    @Query("SELECT * FROM privateevent WHERE id=:id")
+    abstract fun getPrivateById(id :Int): PrivateEvent
+/*
+    @Query("select h.id_holiday, h.name_holiday, h.description_holiday, h.img_holiday, h.type, h.country, h.day, h.month, h.dayOfYear, h.ordered from(SELECT row_number() over(partition by h.type order by h.ordered) as rown, h.* FROM holiday h)h")
+    abstract fun getAllHolidays1(): LiveData<List<Holiday>>
+*/
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun synchronizeHolidays(holidays: List<Holiday>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract suspend fun insertPrivateEvent(privateEvent: PrivateEvent)
+
+    @Update
+    abstract suspend fun updatePrivateEvent(privateEvent: PrivateEvent)
+
+    @Transaction
+    open suspend fun savePrivateEvent(privateEvent: PrivateEvent) {
+        if(privateEvent.id>0)
+            updatePrivateEvent(privateEvent)
+        else
+            insertPrivateEvent(privateEvent)
+    }
 /*
     @Query("SELECT * FROM typedetail where id in(3,4,5,6,7,8,9,10,11,12,13,14,15,16,17)")
     abstract fun getTypesDetail(): LiveData<List<TypeDetail>>

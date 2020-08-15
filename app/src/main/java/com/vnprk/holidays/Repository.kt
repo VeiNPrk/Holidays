@@ -6,31 +6,35 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.work.ListenableWorker
-import com.fmklab.fmkinp.NetworkState
-import com.fmklab.fmkinp.models.Status
-//import androidx.work.ListenableWorker
+import com.vnprk.holidays.models.LoadingState
+import com.vnprk.holidays.models.Status
 import com.vnprk.holidays.models.*
-import com.google.gson.Gson
-import com.google.gson.JsonDeserializationContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.lang.Exception
-import kotlin.collections.ArrayList
 import com.vnprk.holidays.Room.LocalDb
 import com.vnprk.holidays.Room.RemoteDb
 import com.vnprk.holidays.models.Holiday
-import com.vnprk.holidays.utils.NetworkUtils
+import com.vnprk.holidays.utils.DateUtils
 import com.vnprk.holidays.utils.NetworkUtils.Companion.networkState
 import com.vnprk.holidays.utils.SharedPreferencesUtils
+import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 
-/*@Singleton*/
+@Singleton
 class Repository @Inject constructor(private val localDb: LocalDb, private val remoteDb: RemoteDb) {
 
     //private val networkState = MutableLiveData<NetworkState>()
     private val TAG = "Repository"
     private var testHoliday = MutableLiveData<List<Event>>()
+    private val _nowDate = MutableLiveData<Long>()
+    val nowDate: LiveData<Long>
+        get() = _nowDate
+
+    init{
+        _nowDate.value=Calendar.getInstance().timeInMillis
+    }
+
+    fun getNowDateLong() = nowDate
 /*
     private var _myUser = MutableLiveData<UserClass>()
     private lateinit var myUser: LiveData<UserClass>
@@ -55,31 +59,28 @@ class Repository @Inject constructor(private val localDb: LocalDb, private val r
     var detailsList = ArrayList<DetailNum>()
 */
 
-    fun getAllHolidays() = localDb.getAllHolidays() as LiveData<List<Event>>
-
-    fun getHolidaysByType(type:Int) = localDb.getHolidaysByType(type)
-
-    //fun getTestHoliday() = testHoliday
-
-    fun initTestHoliday() {
-        var list = listOf(
-            Holiday(1,"test1", "descr1", null, 1, 1, null, null, null, 1),
-            Holiday(2,"test2", "descr2", null, 2, 1, null, null, null, 1),
-            Holiday(3,"test3", "descr3", null, 3, 1, null, null, null, 1),
-            Holiday(4,"test4", "descr4", null, 4, 1, null, null, null, 1),
-            Holiday(5,"test5", "descr5", null, 5, 1, null, null, null, 1),
-            PrivateEvent(6,"test private", "descr private", null, 0, 1, null, null, null, 1,1)
-        )
-        testHoliday.postValue(list)
+    fun setNowDate(nowDate:Long){
+        _nowDate.value=nowDate
     }
+
+    fun getAllHolidays(day:Int, month:Int, dayOfYear:Int) = /*Transformations.switchMap(nowDate) {
+            address -> */localDb.getAllHolidays(day, month, dayOfYear) //}
+
+    fun getHolidaysByType(type:Int, day:Int, month:Int, dayOfYear:Int) = localDb.getHolidaysByType(type, day, month, dayOfYear)
+
+    fun getHolidayById(id:Int) = localDb.getHolidayById(id)
+
+    fun getAllPrivateEvents() = localDb.getAllPrivateEvents()
+
+    fun getPrivateEventById(id:Int) = localDb.getPrivateEventById(id)
+
     suspend fun syncronizeHolidaysData(context: Context): ListenableWorker.Result {
         Log.d("coroutine", "initData Start")
-        networkState.postValue(NetworkState.LOADING)
+        networkState.postValue(LoadingState.LOADING)
         val response = remoteDb.getAllHolidays()
         Log.d("coroutine", "remoteDb.getAllHolidays() DONE")
         try {
             if (response.isSuccessful && response.code() == 200) {
-                val str = response.body().toString()
                 val responseData: ResponseData<Holiday>? =
                     response.body()
                 return if (responseData!!.isSucces == 1) {
@@ -88,28 +89,32 @@ class Repository @Inject constructor(private val localDb: LocalDb, private val r
                     SharedPreferencesUtils.setDateUpdateDb(context, responseData.dateUpdateDb)
                     SharedPreferencesUtils.setHasNewVersionDb(context, false)
                     Log.d("coroutine", "localDb.insertInit DONE")
-                    networkState.postValue(NetworkState(Status.SUCCESS, ""))
+                    networkState.postValue(LoadingState(Status.SUCCESS, ""))
                     ListenableWorker.Result.success()
                 } else {
-                    networkState.postValue(NetworkState(Status.FAILED, responseData.message))
+                    networkState.postValue(LoadingState(Status.FAILED, responseData.message))
                     ListenableWorker.Result.retry()
                 }
             } else {
                 Log.e(TAG, response.message())
-                networkState.postValue(NetworkState(Status.FAILED, response.message()))
+                networkState.postValue(LoadingState(Status.FAILED, response.message()))
                 return ListenableWorker.Result.retry()
             }
         } catch (e: Exception) {
             val errorMessage = e.message
             Log.d(TAG, errorMessage)
-            networkState.postValue(NetworkState(Status.FAILED, errorMessage!!))
+            networkState.postValue(LoadingState(Status.FAILED, errorMessage!!))
             return ListenableWorker.Result.failure()
         } catch (e: Throwable) {
             val errorMessage = e.message
             Log.d(TAG, errorMessage)
-            networkState.postValue(NetworkState(Status.FAILED, errorMessage!!))
+            networkState.postValue(LoadingState(Status.FAILED, errorMessage!!))
             return ListenableWorker.Result.failure()
         }
+    }
+
+    suspend fun saveEvent(event: PrivateEvent){
+        localDb.savePrivateEvent(event)
     }
 
    // fun getNetworkState() = networkState

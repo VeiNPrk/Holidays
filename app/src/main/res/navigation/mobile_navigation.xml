@@ -11,21 +11,20 @@
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_main">
         <action
-            android:id="@+id/action_HomeFragment_to_HomeSecondFragment"
-            app:destination="@id/nav_home_second" />
-    </fragment>
-    <fragment
-        android:id="@+id/nav_home_second"
-        android:name="com.vnprk.holidays.ui.home.HomeSecondFragment"
-        android:label="@string/home_second"
-        tools:layout="@layout/fragment_home_second">
+            android:id="@+id/action_nav_home_to_nav_celebration"
+            app:destination="@id/nav_celebration" />
         <action
-            android:id="@+id/action_HomeSecondFragment_to_HomeFragment"
-            app:destination="@id/nav_home" />
-
-        <argument
-            android:name="myArg"
-            app:argType="string" />
+            android:id="@+id/action_nav_home_to_nav_celebration_private"
+            app:destination="@id/nav_celebration_private" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_celebration_country"
+            app:destination="@id/nav_celebration_country" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_celebration_religious"
+            app:destination="@id/nav_celebration_religious" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_celebration_other"
+            app:destination="@id/nav_celebration_other" />
     </fragment>
     <fragment
         android:id="@+id/nav_celebration"
@@ -59,8 +58,38 @@
             android:defaultValue="2" />
     </fragment>
     <fragment
+        android:id="@+id/nav_celebration_other"
+        android:name="com.vnprk.holidays.views.CelebrationListFragment"
+        android:label="@string/menu_celebration_other"
+        tools:layout="@layout/fragment_celebration_list">
+        <argument
+            android:name="typeCelebrate"
+            app:argType="integer"
+            android:defaultValue="3" />
+    </fragment>
+    <fragment
         android:id="@+id/nav_celebration_private"
         android:name="com.vnprk.holidays.views.PrivateListFragment"
         android:label="@string/menu_celebration_private"
-        tools:layout="@layout/fragment_private_list"/>
+        tools:layout="@layout/fragment_private_list">
+        <action
+            android:id="@+id/action_nav_celebration_private_to_privateEventEditFragment"
+            app:destination="@id/privateEventEditFragment" >
+            <argument
+                android:name="idEvent"
+                android:defaultValue="0" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/privateEventEditFragment"
+        android:name="com.vnprk.holidays.views.PrivateEventEditFragment"
+        android:label="Личное событие" >
+        <action
+            android:id="@+id/action_privateEventEditFragment_to_nav_celebration_private"
+            app:destination="@id/nav_celebration_private" />
+        <argument
+            android:name="idEvent"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 </navigation>

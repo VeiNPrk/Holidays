@@ -5,14 +5,25 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Настройки</string>
+    <string name="action_date">Дата</string>
 
     <string name="menu_home">Главная</string>
     <string name="menu_celebration">Праздники</string>
     <string name="menu_celebration_country">Праздники России</string>
     <string name="menu_celebration_religious">Православные праздники</string>
+    <string name="menu_celebration_other">Разное</string>
     <string name="menu_celebration_private">Личные</string>
 
     <string name="no_first_connection">Для первоначальной загрузки необходимо интернет соединение!</string>
+    <string name="no_have_celebrate">Праздников нет</string>
     <string name="home_second">Home Second</string>
+
+    <string name="rv_card_action_more">Ещё</string>
+
+    <string name="tv_event_name_null">(Заголовок отсутствует)</string>
+    <string name="default_notification_channel_id">1234</string>
+    <string name="fcm_message">TestNotify</string>
+    <string name="fcm_notify_tittle">АРМ НК</string>
+    <string name="bar_today">Сегодня</string>
 </resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+        <variable
+                name="holiday"
+                type="com.vnprk.holidays.models.Holiday" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:minHeight="500dp"
+        android:orientation="vertical"
+        android:padding="16dp">
+        <!-- Media -->
+        <ImageView
+            android:id="@+id/imv_holiday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="120dp"
+            android:scaleType="fitCenter"
+            android:visibility="@{holiday.img==null ?View.GONE : View.VISIBLE }"
+            app:srcCompat="@drawable/ic_menu_camera" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_name_holiday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{holiday.name}"
+                android:textAppearance="?attr/textAppearanceHeadline6" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_descript_holiday"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@{holiday.descript}"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="?android:attr/textColorSecondary"
+                        tools:text="fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffsdf nn snhn hnfdjhsfnhndfhndfjjfds nn jn jndfhndf ndfndkndknd knkjn k nj ndk nknn j ndnkdndk dfndfhndhehnhoenhrenjrnjfdnjfn nj n n n jfn d nd njh nrenher nherne en en n n johnej nh hn" />
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

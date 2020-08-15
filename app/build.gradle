@@ -42,8 +42,10 @@ android {
 }
 
 dependencies {
+    debugImplementation 'com.idescout.sql:sqlscout-server:4.1'
     def lifecycle_version = "2.2.0"
     def nav_version = "2.3.0"
+    releaseImplementation 'com.idescout.sql:sqlscout-server-noop:4.1'
     def room_version = "2.2.5"
     def dagger_version = "2.26"
     def retrofit_version = "2.9.0"
@@ -82,4 +84,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    implementation 'petrov.kristiyan:colorpicker-library:1.1.10'
 }

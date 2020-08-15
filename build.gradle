@@ -5,7 +5,9 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+        maven {
+            url 'http://www.idescout.com/maven/repo/'
+        }
     }
     dependencies {
         def nav_version = "2.3.0"
@@ -22,7 +24,11 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+        maven {
+            url 'http://www.idescout.com/maven/repo/'
+            name 'IDEScout, Inc.'
+        }
+
     }
 }
 

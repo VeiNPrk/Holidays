@@ -13,12 +13,24 @@ class LocalDb @Inject constructor(private val inpDao: DaoInp) {
         //initTestData()
     }
 
-    fun getAllHolidays() = inpDao.getAllHolidays()
+    fun getAllHolidays(day:Int, month:Int, dayOfYear:Int) = inpDao.getAllHolidays(day, month, dayOfYear)
 
-    fun getHolidaysByType(type:Int) = inpDao.getHolidaysByType(type)
+    fun getAllPrivateEvents() = inpDao.getAllPrivateEvents()
+
+    fun getHolidaysByType(type:Int, day:Int, month:Int, dayOfYear:Int) = inpDao.getHolidaysByType(type, day, month, dayOfYear)
+
+    fun getHolidayById(id:Int) = inpDao.getHolidayById(id)
+
+    fun getPrivateEventById(id:Int) = inpDao.getPrivateEventById(id)
+
+    fun getPrivateById(id:Int) = inpDao.getPrivateById(id)
 
     suspend fun synchronizeHolidays(holidays: List<Holiday>){
         inpDao.synchronizeHolidays(holidays)
+    }
+
+    suspend fun savePrivateEvent(event: PrivateEvent){
+        inpDao.savePrivateEvent(event)
     }
 /*
     fun getNumDetail(idDetail:Int) = inpDao.getControlDetail(idDetail)

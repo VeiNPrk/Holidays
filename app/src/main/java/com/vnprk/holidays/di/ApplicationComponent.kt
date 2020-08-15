@@ -1,7 +1,9 @@
 package com.vnprk.holidays.di
 
 import android.content.Context
+import com.vnprk.holidays.MainActivity
 import com.vnprk.holidays.models.HolidayWorker
+import com.vnprk.holidays.utils.AlarmService
 //import com.vnprk.holidays.models.MyWorker
 import com.vnprk.holidays.viewmodels.*
 import dagger.BindsInstance
@@ -21,9 +23,13 @@ interface ApplicationComponent {
     }
 
     fun inject(worker: HolidayWorker)
+    fun inject(activity:MainActivity)
     fun inject(viewModel: MainViewModel)
     fun inject(viewModel: CelebrationListViewModel)
     fun inject(viewModel: PrivateListViewModel)
+    fun inject(viewModel: HolidayViewModel)
+    fun inject(viewModel: PrivateEventViewModel)
+    fun inject(alarmService:AlarmService)
     /*fun inject(viewModel: SplashScreenViewModel)
     fun inject(viewModel: RegistrationViewModel)
     fun inject(viewModel: DetailCastViewModel)

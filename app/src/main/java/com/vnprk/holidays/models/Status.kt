@@ -1,4 +1,4 @@
-package com.fmklab.fmkinp.models
+package com.vnprk.holidays.models
 
 enum class Status {
     RUNNING,

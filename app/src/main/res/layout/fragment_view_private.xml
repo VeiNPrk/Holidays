@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+        <import type="android.graphics.Color"/>
+        <variable
+                name="event"
+                type="com.vnprk.holidays.models.PrivateEvent" />
+        <variable
+            name="viewModel"
+            type="com.vnprk.holidays.viewmodels.PrivateEventViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:minHeight="500dp"
+        android:padding="16dp">
+        <!-- Media -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:clickable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/ic_menu_edit" />
+
+        <ImageView
+            android:id="@+id/imv_holiday"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="120dp"
+            android:scaleType="fitCenter"
+            android:visibility="@{event.img==null ?View.GONE : View.VISIBLE }"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fab_edit"
+            app:srcCompat="@drawable/ic_menu_camera" />
+
+
+        <TextView
+            android:id="@+id/tv_name_holiday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{event.name!=null &amp;&amp; !event.name.empty ? event.name : @string/tv_event_name_null}"
+            android:textAppearance="?attr/textAppearanceHeadline5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imv_holiday"
+            tools:text="Название" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{viewModel.fullDateStrLiveData}"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            tools:text="1234g"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name_holiday" />
+
+        <LinearLayout
+            android:id="@+id/layout_period"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/tv_date"
+            tools:layout_editor_absoluteX="16dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                app:srcCompat="@android:drawable/ic_menu_rotate" />
+
+            <TextView
+                android:id="@+id/tv_name_period"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.periodNameValue}"
+                android:textAppearance="?attr/textAppearanceHeadline6" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_notify_before"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/layout_period"
+            tools:layout_editor_absoluteX="16dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                app:srcCompat="@android:drawable/ic_popup_reminder" />
+
+            <TextView
+                android:id="@+id/tv_name_notify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.notifyNameValue}"
+                android:textAppearance="?attr/textAppearanceHeadline6" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_descript_holiday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:text="@{event.descript}"
+            android:visibility="@{event.descript==null &amp;&amp; event.descript.empty ?View.GONE : View.VISIBLE }"
+            android:textAlignment="textStart"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="?android:attr/textColorSecondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_notify_before"
+            tools:text="fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffsdf nn snhn hnfdjhsfnhndfhndfjjfds nn jn jndfhndf ndfndkndknd knkjn k nj ndk nknn j ndnkdndk dfndfhndhehnhoenhrenjrnjfdnjfn nj n n n jfn d nd njh nrenher nherne en en n n johnej nh hn" />
+
+        <LinearLayout
+            android:id="@+id/layout_color"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@{Color.parseColor(viewModel.colorNameValue)}"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_descript_holiday" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
