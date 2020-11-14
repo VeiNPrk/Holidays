@@ -1,5 +1,7 @@
 package com.vnprk.holidays.views
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +11,7 @@ import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -16,6 +19,7 @@ import com.vnprk.holidays.R
 import com.vnprk.holidays.databinding.FragmentHolidayBinding
 import com.vnprk.holidays.viewmodels.HolidayViewModel
 import com.vnprk.holidays.viewmodels.MainViewModel
+import kotlinx.android.synthetic.main.rv_holiday_maket.view.*
 
 
 class CelebrationViewFragment : BottomSheetDialogFragment() {
@@ -51,17 +55,39 @@ class CelebrationViewFragment : BottomSheetDialogFragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_holiday, container, false)
         binding.lifecycleOwner = this
+
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.getHoliday(idHoliday).observe(this, Observer { holiday ->
-            holiday?.let {
-                binding.setVariable(BR.holiday, it)
+            holiday?.let { itHoliday->
+                binding.setVariable(BR.holiday, itHoliday)
                 binding.executePendingBindings()
+                itHoliday.img?.let { imgLink->
+                        Glide
+                            .with(this)
+                            .load(imgLink)
+                            .error(R.drawable.ic_baseline_today_50)
+                            .placeholder(R.drawable.ic_baseline_today_50)
+                            .into(binding.imvHoliday)
+                }
+                itHoliday.link?.let { link ->
+                    binding.imvOpenLink.setOnClickListener {
+                        openWebPage(link)
+                    }
+                }
             }
         })
+    }
+
+    private fun openWebPage(url: String) {
+        val webpage: Uri = Uri.parse(url)
+        val intent = Intent(Intent.ACTION_VIEW, webpage)
+        if (intent.resolveActivity(requireActivity().packageManager) != null) {
+            startActivity(intent)
+        }
     }
 
     companion object {

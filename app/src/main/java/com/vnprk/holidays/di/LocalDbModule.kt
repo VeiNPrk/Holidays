@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.vnprk.holidays.Room.DBRoomInp
 import com.vnprk.holidays.Room.DaoInp
+import com.vnprk.holidays.Room.MIGRATION_1_2
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -16,7 +17,7 @@ class LocalDbModule {
     @Singleton
     fun provideDBRoomInp(context: Context): DBRoomInp {
         return Room.databaseBuilder(context, DBRoomInp::class.java, "database")
-            //.addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_1_2)
             .build()
     }
 

@@ -21,17 +21,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application), M
 
     @Inject
     lateinit var repository : Repository
-    private val workManager = WorkManager.getInstance(getApplication())
-    private val WORK_SAVE_NAME = "work_save_name"
-    private val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
     private val allEventsLiveData = MediatorLiveData<List<AdapterItem<Event>>>()
     private var holidaysLiveData : LiveData<List<Holiday>>
     private var privateEventLiveData : LiveData<List<PrivateEvent>>
+    private var nowDateTimeMils :Long = 0
     init{
         getApplication<App>().appComponent.inject(this)
-        workManager.pruneWork()
+
         holidaysLiveData = Transformations.switchMap(repository.getNowDateLong()) {
                 dateMils ->
+            nowDateTimeMils = dateMils
             repository.getAllHolidays(DateUtils.getDayFromMills(dateMils),
                 DateUtils.getMonthFromMills(dateMils),
                 DateUtils.getDayOfYearFromMills(dateMils)) }
@@ -52,22 +51,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), M
     }
     val text: LiveData<String> = _text
 
-    fun refreshData(){
-        if(SharedPreferencesUtils.getVersionDb(getApplication())==0){
-            if(!NetworkUtils.isNetworkAvailable(getApplication()))
-                NetworkUtils.networkState.postValue(LoadingState(Status.FAILED, NetworkUtils.ERROR_NO_CONNECTION))
 
-            initHolidayData()
-        }
-    }
-
-    private fun initHolidayData(){
-        val simpleRequest = OneTimeWorkRequestBuilder<HolidayWorker>()
-            .setConstraints(constraints)
-            .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 2, TimeUnit.SECONDS)
-            .build()
-        workManager.enqueueUniqueWork(WORK_SAVE_NAME, ExistingWorkPolicy.KEEP, simpleRequest)
-    }
 
     fun getAllEvents() = allEventsLiveData
 
@@ -90,8 +74,33 @@ class MainViewModel(application: Application) : AndroidViewModel(application), M
             }
         }
         if (!eventsList.isNullOrEmpty()) {
-            list.add(AdapterItem(null, EventsRecyclerAdapter.TYPE_HEADER, eventsList[0].type,"Личное", true))
-            list.add(AdapterItem(eventsList[0], EventsRecyclerAdapter.TYPE_ITEM, eventsList[0].type, "", eventsList.size > 1))
+            val elems = eventsList.filter {
+                (DateUtils.isPeriodDate(
+                    it.startDateTime,
+                    nowDateTimeMils,
+                    it.period
+                ) && it.isActive) || (!it.isActive && DateUtils.isStartDay(it.startDateTime, nowDateTimeMils))
+            }
+            if (!elems.isNullOrEmpty()){
+                list.add(
+                    AdapterItem(
+                        null,
+                        EventsRecyclerAdapter.TYPE_HEADER,
+                        elems[0].type,
+                        "Личное",
+                        true
+                    )
+                )
+                list.add(
+                    AdapterItem(
+                        elems[0],
+                        EventsRecyclerAdapter.TYPE_ITEM,
+                        elems[0].type,
+                        "",
+                        elems.size > 1
+                    )
+                )
+            }
         }
         return list
     }

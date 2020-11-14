@@ -6,27 +6,33 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_baseline_home_32"
             android:title="@string/menu_home" />
         <item
             android:id="@+id/nav_celebration"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_baseline_stars_32"
             android:title="@string/menu_celebration" />
         <item
             android:id="@+id/nav_celebration_country"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_baseline_stars_32"
             android:title="@string/menu_celebration_country" />
         <item
             android:id="@+id/nav_celebration_religious"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_baseline_stars_32"
             android:title="@string/menu_celebration_religious" />
         <item
             android:id="@+id/nav_celebration_other"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_baseline_stars_32"
             android:title="@string/menu_celebration_other" />
         <item
             android:id="@+id/nav_celebration_private"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_baseline_stars_32"
             android:title="@string/menu_celebration_private" />
     </group>
+    <item
+        android:id="@+id/nav_fragment_settings"
+        android:icon="@drawable/ic_baseline_settings_32"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+ />
 </menu>

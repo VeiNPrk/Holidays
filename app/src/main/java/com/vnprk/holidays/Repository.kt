@@ -13,6 +13,7 @@ import java.lang.Exception
 import com.vnprk.holidays.Room.LocalDb
 import com.vnprk.holidays.Room.RemoteDb
 import com.vnprk.holidays.models.Holiday
+import com.vnprk.holidays.utils.AlarmUtils
 import com.vnprk.holidays.utils.DateUtils
 import com.vnprk.holidays.utils.NetworkUtils.Companion.networkState
 import com.vnprk.holidays.utils.SharedPreferencesUtils
@@ -63,12 +64,21 @@ class Repository @Inject constructor(private val localDb: LocalDb, private val r
         _nowDate.value=nowDate
     }
 
+    suspend fun getHolidayByType(types:List<Int>) = localDb.getHolidayByType(types).groupBy { Triple(it.month, it.day, it.dayOfYear) }.values.toList()
+        .map { it.first() }
+
     fun getAllHolidays(day:Int, month:Int, dayOfYear:Int) = /*Transformations.switchMap(nowDate) {
             address -> */localDb.getAllHolidays(day, month, dayOfYear) //}
 
     fun getHolidaysByType(type:Int, day:Int, month:Int, dayOfYear:Int) = localDb.getHolidaysByType(type, day, month, dayOfYear)
 
     fun getHolidayById(id:Int) = localDb.getHolidayById(id)
+
+    fun getHolidayActiveAlarm() = localDb.getHolidayActiveAlarm()
+
+    suspend fun updateAlarmHolidays(holidays: List<Holiday>){
+        localDb.updateAlarmHolidays(holidays)
+    }
 
     fun getAllPrivateEvents() = localDb.getAllPrivateEvents()
 
@@ -77,17 +87,39 @@ class Repository @Inject constructor(private val localDb: LocalDb, private val r
     suspend fun syncronizeHolidaysData(context: Context): ListenableWorker.Result {
         Log.d("coroutine", "initData Start")
         networkState.postValue(LoadingState.LOADING)
-        val response = remoteDb.getAllHolidays()
+        val response = remoteDb.getAllHolidays(SharedPreferencesUtils.getVersionDb(context))
         Log.d("coroutine", "remoteDb.getAllHolidays() DONE")
         try {
             if (response.isSuccessful && response.code() == 200) {
                 val responseData: ResponseData<Holiday>? =
                     response.body()
-                return if (responseData!!.isSucces == 1) {
-                    localDb.synchronizeHolidays(responseData.result)
-                    SharedPreferencesUtils.setVersionDb(context, responseData.versionDb)
-                    SharedPreferencesUtils.setDateUpdateDb(context, responseData.dateUpdateDb)
-                    SharedPreferencesUtils.setHasNewVersionDb(context, false)
+                return if (responseData!!.isSucces > 0) {
+                    if (responseData!!.isSucces == 1) {
+                        responseData.result?.let {
+                            localDb.synchronizeHolidays(it)
+                            SharedPreferencesUtils.setVersionDb(context, responseData.versionDb)
+                            SharedPreferencesUtils.setDateUpdateDb(
+                                context,
+                                responseData.dateUpdateDb
+                            )
+                            val listTypes = mutableListOf<Int>()
+                            SharedPreferencesUtils.getHolidayTipes(context)?.forEach {
+                                listTypes.add(it.toInt())
+                            }
+                            val listHoliday = getHolidayByType(listTypes)
+                            listHoliday.forEach { holiday ->
+                                holiday.isAlarm = true
+                            }
+                            AlarmUtils.updateHolidayAlarm(
+                                context,
+                                getHolidayActiveAlarm(),
+                                listHoliday,
+                                SharedPreferencesUtils.getNotifyHolidayTime(context)
+                            )
+                            updateAlarmHolidays(listHoliday)
+                            //SharedPreferencesUtils.setHasNewVersionDb(context, false)
+                        }
+                    }
                     Log.d("coroutine", "localDb.insertInit DONE")
                     networkState.postValue(LoadingState(Status.SUCCESS, ""))
                     ListenableWorker.Result.success()
@@ -113,9 +145,9 @@ class Repository @Inject constructor(private val localDb: LocalDb, private val r
         }
     }
 
-    suspend fun saveEvent(event: PrivateEvent){
-        localDb.savePrivateEvent(event)
-    }
+    suspend fun saveEvent(event: PrivateEvent) = localDb.savePrivateEvent(event)
+
+    suspend fun deleteEvent(event: PrivateEvent) { localDb.deletePrivateEvent(event) }
 
    // fun getNetworkState() = networkState
 

@@ -17,9 +17,25 @@ class LocalDb @Inject constructor(private val inpDao: DaoInp) {
 
     fun getAllPrivateEvents() = inpDao.getAllPrivateEvents()
 
+    fun disactiveEventById(id :Int){
+        inpDao.disactiveEventById(id)
+    }
+
+    suspend fun updateAlarmHolidays(holidays: List<Holiday>){
+        inpDao.updateAlarmHolidays(holidays)
+    }
+
+    fun getHolidayByType(types:List<Int>) = inpDao.getHolidayByType(types)
+
+    fun getHolidayActiveAlarm() = inpDao.getHolidayActiveAlarm()
+
     fun getHolidaysByType(type:Int, day:Int, month:Int, dayOfYear:Int) = inpDao.getHolidaysByType(type, day, month, dayOfYear)
 
     fun getHolidayById(id:Int) = inpDao.getHolidayById(id)
+
+    fun getHolidayId(id:Int) = inpDao.getHolidayId(id)
+
+    fun getPrivateActiveAlarm() = inpDao.getPrivateActiveAlarm()
 
     fun getPrivateEventById(id:Int) = inpDao.getPrivateEventById(id)
 
@@ -29,9 +45,9 @@ class LocalDb @Inject constructor(private val inpDao: DaoInp) {
         inpDao.synchronizeHolidays(holidays)
     }
 
-    suspend fun savePrivateEvent(event: PrivateEvent){
-        inpDao.savePrivateEvent(event)
-    }
+    suspend fun savePrivateEvent(event: PrivateEvent) = inpDao.savePrivateEvent(event)
+
+    suspend fun deletePrivateEvent(event: PrivateEvent){ inpDao.deletePrivateEvent(event) }
 /*
     fun getNumDetail(idDetail:Int) = inpDao.getControlDetail(idDetail)
 

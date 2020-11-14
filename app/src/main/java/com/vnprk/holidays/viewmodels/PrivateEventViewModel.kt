@@ -173,6 +173,7 @@ class PrivateEventViewModel (application: Application) : AndroidViewModel(applic
                 override fun onCancel() {
                 }
             })
+            .setTitle(activity.baseContext.resources.getString(R.string.fr_edit_colordlg_tittle))
             .setRoundColorButton(true)
             .disableDefaultButtons(true)
             .setColors(ArrayList<String>(Event.colors.values))
@@ -227,7 +228,8 @@ class PrivateEventViewModel (application: Application) : AndroidViewModel(applic
             AlarmUtils.setAlarm(it,
                 privateEvent!!.name?:context.resources.getString(R.string.tv_event_name_null),
                 DateUtils.getMilsWithAdding(privateEvent!!.startDateTime, privateEvent!!.notifyBefore),
-                privateEvent!!.id
+                privateEvent!!.id,
+                privateEvent!!.type
             )
             /*val alarmManager : AlarmManager = it.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val myIntent = Intent(it, AlarmBroadcastReceiver::class.java)
@@ -252,12 +254,13 @@ class PrivateEventViewModel (application: Application) : AndroidViewModel(applic
         privateEvent?.idColor = colorKeyValue
         privateEvent?.period = periodKeyValue
         privateEvent?.notifyBefore = notifyKeyValue
+        privateEvent?.isActive = true
         if(checkValidation()){
             viewModelScope.launch(Dispatchers.IO) {
                 loadStateLiveData.postValue(LoadingState.LOADING)
                 privateEvent?.let { event->
                     try {
-                        repository.saveEvent(event)
+                        event.id = repository.saveEvent(event)
                     } catch (ex: Exception) {
                         val errorMessage = ex.message
                         loadStateLiveData.postValue(LoadingState(Status.FAILED, errorMessage!!))
@@ -268,5 +271,25 @@ class PrivateEventViewModel (application: Application) : AndroidViewModel(applic
         } else{
             loadStateLiveData.postValue(LoadingState(Status.FAILED, "Дата и Время окончания должна быть больше или равна Дате и Времени начала"))
         }
+    }
+
+
+    fun deletePrivateEvent(context: Context){
+        privateEvent?.let{ event ->
+            viewModelScope.launch(Dispatchers.IO) {
+                AlarmUtils.cancelAlarm(context, event!!.name?:context.resources.getString(R.string.tv_event_name_null), event.id, event.type)
+                //loadStateLiveData.postValue(LoadingState.LOADING)
+                privateEvent?.let { event->
+                    try {
+                        repository.deleteEvent(event)
+                    } catch (ex: Exception) {
+                        val errorMessage = ex.message
+                        //loadStateLiveData.postValue(LoadingState(Status.FAILED, errorMessage!!))
+                    }
+                }
+                //loadStateLiveData.postValue(LoadingState(Status.SUCCESS, ACTION_SAVE_COMPLETE))
+            }
+        }
+
     }
 }

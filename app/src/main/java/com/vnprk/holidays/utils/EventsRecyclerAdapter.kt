@@ -1,5 +1,6 @@
 package com.vnprk.holidays.utils
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +11,7 @@ import com.vnprk.holidays.models.PrivateEvent
 import com.vnprk.holidays.utils.ViewHolderFactory
 
 
-class EventsRecyclerAdapter(val detailClickListener: EventDetailClickListener?, val moreClickListener: EventMoreClickListener?) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class EventsRecyclerAdapter(val context:Context, val detailClickListener: EventDetailClickListener?, val moreClickListener: EventMoreClickListener?) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     //lateinit var context:Context
     //private lateinit var detailControlClickListener : DetailControlClickListener;
@@ -42,7 +43,7 @@ class EventsRecyclerAdapter(val detailClickListener: EventDetailClickListener?, 
     }
 
     override fun onBindViewHolder(holder : RecyclerView.ViewHolder, i : Int ) {
-        (holder as Binder).bind(data.get(i), detailClickListener, moreClickListener)
+        (holder as Binder).bind(context, data.get(i), detailClickListener, moreClickListener)
          //val detail = data.get(i);
         /*holder.bind(data.get(i))
         holder.binding.root.setOnClickListener {
@@ -73,7 +74,7 @@ class EventsRecyclerAdapter(val detailClickListener: EventDetailClickListener?, 
     }
 
     internal interface Binder {
-        fun bind(detailControl: AdapterItem<Event>, detailClickListener: EventDetailClickListener?, moreClickListener: EventMoreClickListener?)
+        fun bind(context: Context, detailControl: AdapterItem<Event>, detailClickListener: EventDetailClickListener?, moreClickListener: EventMoreClickListener?)
     }
 
     override fun getItemCount() = data.size

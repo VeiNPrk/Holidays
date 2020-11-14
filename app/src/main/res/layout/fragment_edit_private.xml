@@ -19,28 +19,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:gravity="right"
+        android:background="@color/colorBackgroundView"
         android:padding="16dp">
-        <!-- Media -->
-        <!--<ImageView
-            android:id="@+id/imv_holiday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="120dp"
-            android:scaleType="fitCenter"
-            android:visibility="@{holiday.img==null ?View.GONE : View.VISIBLE }"
-            app:srcCompat="@drawable/ic_menu_camera" />-->
-
-        <!--<Spinner
-            android:id="@+id/spn_period"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:selectedItemPosition="@={viewModel.periodItemPosition}"/>-->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_save_event"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Сохранить"
-            />
+            android:text="@string/fr_edit_private_btn_save" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -55,7 +42,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:hint="Введите заголовок"
+                android:hint="Добавьте заголовок"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                android:imeOptions="actionDone"
                 android:inputType="text"
                 android:text="@={event.name}" />
 
@@ -133,12 +122,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleType="fitCenter"
-                    app:srcCompat="@android:drawable/ic_menu_rotate" />
-
+                    app:srcCompat="@drawable/ic_outline_loop_24"
+                    tools:ignore="VectorDrawableCompat" />
                 <TextView
                     android:id="@+id/tv_name_period"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
                     android:text="@{viewModel.periodNameValue}"
                     android:textAppearance="?attr/textAppearanceHeadline6" />
             </LinearLayout>
@@ -157,12 +147,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleType="fitCenter"
-                    app:srcCompat="@android:drawable/ic_popup_reminder" />
+                    app:srcCompat="@drawable/ic_baseline_alarm_32"
+                    tools:ignore="VectorDrawableCompat" />
 
                 <TextView
                     android:id="@+id/tv_name_notify"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
                     android:text="@{viewModel.notifyNameValue}"
                     android:textAppearance="?attr/textAppearanceHeadline6" />
             </LinearLayout>
@@ -174,24 +166,30 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
-
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/ic_baseline_color_lens_32"
+                    tools:ignore="VectorDrawableCompat" />
                 <ImageView
                     android:id="@+id/imv_color"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:background="@{Color.parseColor(viewModel.colorNameValue)}"
                     android:padding="8dp"
                     android:scaleType="fitCenter" />
 
-                <TextView
+                <!--<TextView
                     android:id="@+id/tv_color"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:text="Выберите цвет"
-                    android:textAppearance="?attr/textAppearanceHeadline6" />
+                    android:textAppearance="?attr/textAppearanceHeadline6" />-->
             </LinearLayout>
 
 
@@ -199,18 +197,24 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/ic_baseline_notes_32"
+                        tools:ignore="VectorDrawableCompat" />
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/tv_descript_holiday"
+                        android:textAppearance="?attr/textAppearanceHeadline5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@={event.descript}"
+                        android:imeOptions="actionDone"
+                        android:hint="Добавьте описание"
                         android:inputType="textMultiLine"
-                        android:textAppearance="?attr/textAppearanceBody2"
-                        android:textColor="?android:attr/textColorSecondary"
-                        tools:text="fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffsdf nn snhn hnfdjhsfnhndfhndfjjfds nn jn jndfhndf ndfndkndknd knkjn k nj ndk nknn j ndnkdndk dfndfhndhehnhoenhrenjrnjfdnjfn nj n n n jfn d nd njh nrenher nherne en en n n johnej nh hn" />
+                        android:text="@={event.descript}"
+                        tools:text="Fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffsdf nn snhn hnfdjhsfnhndfhndfjjfds nn jn jndfhndf ndfndkndknd knkjn k nj ndk nknn j ndnkdndk dfndfhndhehnhoenhrenjrnjfdnjfn nj n n n jfn d nd njh nrenher nherne en en n n johnej nh hn" />
                 </LinearLayout>
 
         </LinearLayout>

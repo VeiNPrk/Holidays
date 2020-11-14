@@ -100,7 +100,7 @@ class CelebrationListFragment : Fragment(), EventsRecyclerAdapter.EventDetailCli
     fun setRecyclerView() {
         val mLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         mAdapter =
-            context?.let { EventsRecyclerAdapter(this, null) }!!
+            context?.let { EventsRecyclerAdapter(requireContext(),this, null) }!!
         rv.setHasFixedSize(true)
         rv.layoutManager = mLayoutManager
         rv.adapter = mAdapter

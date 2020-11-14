@@ -1,7 +1,9 @@
 package com.vnprk.holidays.utils
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.vnprk.holidays.BR
 import com.vnprk.holidays.R
@@ -13,14 +15,14 @@ import com.vnprk.holidays.models.PrivateEvent
 
 class PrivateViewHolder(var binding: RvPrivateMaketBinding) :
     RecyclerView.ViewHolder(binding.root), EventsRecyclerAdapter.Binder {
-    override fun bind(item: AdapterItem<Event>, detailClickListener: EventsRecyclerAdapter.EventDetailClickListener?, moreClickListener: EventsRecyclerAdapter.EventMoreClickListener?) {
+    override fun bind(context: Context, item: AdapterItem<Event>, detailClickListener: EventsRecyclerAdapter.EventDetailClickListener?, moreClickListener: EventsRecyclerAdapter.EventMoreClickListener?) {
         binding.setVariable(BR.event, (item.value as PrivateEvent))
         binding.setVariable(BR.adapterItem, item)
         //binding.dateUtils = DateUtils.Companion
         binding.executePendingBindings()
         //binding.root.setBackgroundResource(R.drawable.test_gradient)
         val gd = GradientDrawable(
-            GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(Color.WHITE,
+            GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(ContextCompat.getColor(context, R.color.colorBackgroundItem)/*Color.WHITE*/,
                 //Color.WHITE,
                 Color.parseColor(Event.colors.get(item.value.idColor)),
                 Color.parseColor(Event.colors.get(item.value.idColor)))

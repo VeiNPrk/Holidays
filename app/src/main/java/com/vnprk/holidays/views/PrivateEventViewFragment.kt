@@ -1,23 +1,22 @@
 package com.vnprk.holidays.views
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.vnprk.holidays.BR
 import com.vnprk.holidays.R
 import com.vnprk.holidays.databinding.FragmentViewPrivateBinding
-import com.vnprk.holidays.models.Event
 import com.vnprk.holidays.viewmodels.PrivateEventViewModel
 
 
@@ -29,7 +28,6 @@ class PrivateEventViewFragment : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         idEvent = arguments?.getInt(KEY_ID_EVENT, 0)!!
-        //dialog!!.window.setLayout(300 /*our width*/, ViewGroup.LayoutParams.MATCH_PARENT)
         super.onCreate(savedInstanceState)
     }
 
@@ -59,6 +57,23 @@ class PrivateEventViewFragment : BottomSheetDialogFragment() {
             bundleToTransfer.putInt("key_id_event", idEvent)
             navController?.navigate(R.id.privateEventEditFragment, bundleToTransfer)
             dismiss()
+        }
+        binding.fabDelete.setOnClickListener {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle(R.string.dlg_confirm_delete_tittle)
+                .setPositiveButton(R.string.dlg_confirm_delete_ok,
+                    DialogInterface.OnClickListener { dialog, id ->
+                        // FIRE ZE MISSILES!
+                        viewModel.deletePrivateEvent(requireContext())
+                        dismiss()
+                    })
+                .setNegativeButton(R.string.dlg_confirm_delete_cancel,
+                    DialogInterface.OnClickListener { dialog, id ->
+                        // User cancelled the dialog
+                    })
+            // Create the AlertDialog object and return it
+            // Create the AlertDialog object and return it
+            builder.show()
         }
         return binding.root
     }

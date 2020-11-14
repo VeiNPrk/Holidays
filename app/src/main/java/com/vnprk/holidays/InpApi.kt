@@ -15,7 +15,7 @@ interface InpApi {
 	suspend fun sendAuthCode(@Field("code") authCode:String, @Field("token") token:String): Response<UserClass>
 */
 	@GET("get_holidays.php")
-	suspend fun getHolidays(): Response<ResponseData<Holiday>>
+	suspend fun getHolidays(@Query("db_version") versionDb:Int): Response<ResponseData<Holiday>>
 
 	/*@GET("get_holidays.php")
 	suspend fun getHolidays(): Response<String>*/

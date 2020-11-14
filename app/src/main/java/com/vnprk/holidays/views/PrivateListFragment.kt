@@ -20,7 +20,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.vnprk.holidays.R
 import com.vnprk.holidays.utils.EventsRecyclerAdapter
 import com.vnprk.holidays.viewmodels.PrivateListViewModel
+import kotlinx.android.synthetic.main.fragment_main.view.*
 import kotlinx.android.synthetic.main.fragment_private_list.view.*
+import kotlinx.android.synthetic.main.fragment_private_list.view.tv_msg
 
 class PrivateListFragment : Fragment() , EventsRecyclerAdapter.EventDetailClickListener {
 
@@ -29,9 +31,8 @@ class PrivateListFragment : Fragment() , EventsRecyclerAdapter.EventDetailClickL
     private lateinit var rv: RecyclerView
     private lateinit var fab : FloatingActionButton
     private lateinit var swipeLayout: SwipeRefreshLayout
-   // private lateinit var swipeLayout: SwipeRefreshLayout
+    private lateinit var tvMessage: TextView
     private var isSwipe = false
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,7 +40,7 @@ class PrivateListFragment : Fragment() , EventsRecyclerAdapter.EventDetailClickL
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_private_list, container, false)
-        val tvMessage: TextView = root.tv_msg
+        tvMessage = root.tv_msg
         rv = root.rv_private_events
         swipeLayout = root.findViewById(R.id.swipe_refresh_layout)
         swipeLayout.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
@@ -51,27 +52,18 @@ class PrivateListFragment : Fragment() , EventsRecyclerAdapter.EventDetailClickL
         }
         fab = root.fab_add_event
         fab.setOnClickListener(View.OnClickListener {
-            val navHostFragment = parentFragment?.parentFragmentManager?.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
             val navController =
                 activity?.let { it1 -> Navigation.findNavController(it1, R.id.nav_host_fragment) }
-
             val action = PrivateListFragmentDirections.actionNavCelebrationPrivateToPrivateEventEditFragment()
-            /*navHostFragment.*/navController?.navigate(action)
+            navController?.navigate(action)
         })
-        /*swipeLayout = root.findViewById(R.id.swipe_refresh_layout)
-        swipeLayout.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
-        swipeLayout.setOnRefreshListener {
-            Log.i("ControlList", "onRefresh called from SwipeRefreshLayout")
-            isSwipe = true
-            //viewModel.refreshData(myUserId, myEntId)
-        }*/
         setRecyclerView()
         viewModel.getPrivateEvents().observe(viewLifecycleOwner, Observer {
             swipeLayout.isRefreshing=false
             mAdapter.setDetailsData(it)
             if(it.isEmpty())
             {
-                tvMessage.text=getString(R.string.no_have_celebrate)
+                tvMessage.text=getString(R.string.no_have_private)
                 tvMessage.visibility=View.VISIBLE
             }
             else tvMessage.visibility=View.GONE
@@ -81,9 +73,8 @@ class PrivateListFragment : Fragment() , EventsRecyclerAdapter.EventDetailClickL
 
     private fun setRecyclerView() {
         val mLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        //val maket = viewModel.getRvMaket(typeDetail)
         mAdapter = //viewModel.getRvAdapter(typeDetail, this)//
-            context?.let { EventsRecyclerAdapter(this, null) }!!
+            context?.let { EventsRecyclerAdapter(requireContext(),this, null) }!!
         rv.setHasFixedSize(true)
         rv.layoutManager = mLayoutManager
         rv.adapter = mAdapter

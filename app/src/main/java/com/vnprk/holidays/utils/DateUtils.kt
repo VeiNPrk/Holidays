@@ -1,8 +1,11 @@
 package com.vnprk.holidays.utils
 
+import android.app.Notification
 import android.content.Context
+import android.util.Log
 import com.vnprk.holidays.R
 import com.vnprk.holidays.models.Event
+import com.vnprk.holidays.models.Holiday
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -56,6 +59,24 @@ class DateUtils() {
             return dateFormat.parse(strDate)
         }
 
+        fun getAlarmDateTimeForHoliday(holiday:Holiday, time:Long, isRepeating:Boolean):Long{
+            val calendarNow = Calendar.getInstance()
+            val calendarHoliday = Calendar.getInstance()
+            calendarHoliday.timeInMillis = time
+            calendarHoliday.set(Calendar.SECOND, 0)
+            calendarHoliday.set(Calendar.MILLISECOND, 0)
+            calendarHoliday.set(Calendar.YEAR, calendarNow.get(Calendar.YEAR))
+            if(holiday.dayOfYear!=null){
+                calendarHoliday.set(Calendar.DAY_OF_YEAR, holiday.dayOfYear!!)
+            } else{
+                calendarHoliday.set(Calendar.MONTH, (holiday.month!!-1))
+                calendarHoliday.set(Calendar.DAY_OF_MONTH, holiday.day!!)
+            }
+            if(calendarNow.timeInMillis>calendarHoliday.timeInMillis || isRepeating)
+                calendarHoliday.add(Calendar.YEAR, 1)
+            return calendarHoliday.timeInMillis
+        }
+
         fun getStrDateFromMils(time:Long) :String{
             val calendar = Calendar.getInstance()
             calendar.timeInMillis = time
@@ -87,7 +108,7 @@ class DateUtils() {
             return calendar.timeInMillis
         }
 
-        fun getStrNameDate(context: Context, time:Long):String{
+        fun getStrNameDate(context: Context, time:Long, isNotification: Boolean = false):String{
             val calendarNow = Calendar.getInstance()
             val calendarDate = Calendar.getInstance()
             if(time>0)
@@ -98,11 +119,14 @@ class DateUtils() {
             val dateDay = calendarDate.get(Calendar.DAY_OF_MONTH)
             var strDate = ""
             val months = context.resources.getStringArray(R.array.arr_months)
-            if(nowMonth==dateMonth && nowDay==dateDay){
-                strDate="${context.resources.getString(R.string.bar_today)} $dateDay ${months[dateMonth]}"
-            }else{
+            if(isNotification)
                 strDate="$dateDay ${months[dateMonth]}"
-            }
+            else
+                if(nowMonth==dateMonth && nowDay==dateDay){
+                    strDate="${context.resources.getString(R.string.bar_today)} $dateDay ${months[dateMonth]}"
+                }else{
+                    strDate="$dateDay ${months[dateMonth]}"
+                }
             return strDate
         }
 
@@ -131,8 +155,8 @@ class DateUtils() {
             var strTime = "${getStrTimeFromMils(startTime)} - ${getStrTimeFromMils(finishTime)}"
             var startYear = "${calendarStart.get(Calendar.YEAR)}"
             var finishYear = "${calendarFinish.get(Calendar.YEAR)}"
-            val startDayOfWeek = calendarStart.get(Calendar.DAY_OF_WEEK)
-            val finishDayOfWeek = calendarFinish.get(Calendar.DAY_OF_WEEK)
+            val startDayOfWeek = calendarStart.get(Calendar.DAY_OF_WEEK)-1
+            val finishDayOfWeek = calendarFinish.get(Calendar.DAY_OF_WEEK)-1
             val startMon = calendarStart.get(Calendar.MONTH)
             val finishMon = calendarFinish.get(Calendar.MONTH)
             val startDayOfMon = calendarStart.get(Calendar.DAY_OF_MONTH)
@@ -179,6 +203,69 @@ class DateUtils() {
                 "${dayOfWeek[calendarStart.get(Calendar.DAY_OF_WEEK)]}, ${calendarStart.get(Calendar.DAY_OF_MONTH)} ${months[calendarStart.get(Calendar.MONTH)]} $strTime"
             }*/
             return str
+        }
+        
+        fun isStartDay(startDateTime:Long, nowDateTime:Long) :Boolean{
+           // var tf=false
+            val calNowDate = Calendar.getInstance()
+            calNowDate.timeInMillis = nowDateTime
+            val calStartDate = Calendar.getInstance()
+            calStartDate.timeInMillis = startDateTime
+            /*if(calNowDate.get(Calendar.YEAR)==calStartDate.get(Calendar.YEAR)
+                && calNowDate.get(Calendar.MONTH)==calStartDate.get(Calendar.MONTH)
+                && calNowDate.get(Calendar.DAY_OF_MONTH)==calStartDate.get(Calendar.DAY_OF_MONTH))   */
+            return calNowDate.get(Calendar.YEAR)==calStartDate.get(Calendar.YEAR)
+                    && calNowDate.get(Calendar.MONTH)==calStartDate.get(Calendar.MONTH)
+                    && calNowDate.get(Calendar.DAY_OF_MONTH)==calStartDate.get(Calendar.DAY_OF_MONTH)
+        }
+
+        fun isPeriodDate(startDateTime:Long, nowDateTime:Long, periodId :Int):Boolean{
+            var tf=false
+            val today = Calendar.getInstance()
+            today.timeInMillis = nowDateTime
+            val calDate = Calendar.getInstance()
+            calDate.timeInMillis = startDateTime
+            calDate.set(Calendar.HOUR,0)
+            calDate.set(Calendar.HOUR_OF_DAY,0)
+            calDate.set(Calendar.MINUTE,0)
+            calDate.set(Calendar.SECOND,0)
+            calDate.set(Calendar.MILLISECOND, 0)
+            today.set(Calendar.HOUR,0)
+            today.set(Calendar.HOUR_OF_DAY,0)
+            today.set(Calendar.MINUTE,0)
+            today.set(Calendar.SECOND,0)
+            today.set(Calendar.MILLISECOND, 0)
+            val difference = today.timeInMillis - calDate.timeInMillis
+            if(difference>0) {
+                val calDifference = Calendar.getInstance()
+                calDifference.timeInMillis = difference
+                //val years = calDifference.get(Calendar.YEAR) - 1970
+                var years = today.get(Calendar.YEAR) - calDate.get(Calendar.YEAR)
+                val monthsDifference = today.get(Calendar.MONTH) - calDate.get(Calendar.MONTH)
+                if(years > 0 && monthsDifference<0) years--
+                val months =
+                    if (years > 0) years * 12 + /*calDifference.get(Calendar.MONTH)*/if(monthsDifference>=0) monthsDifference else 12 + monthsDifference
+                    else  if(monthsDifference>=0) monthsDifference else { 12 + monthsDifference }/*calDifference.get(Calendar.MONTH)*/
+                val days = (difference / (1000 * 60 * 60 * 24)).toInt()
+                val weeks = (days / 7/*difference / (1000 * 60 * 60 * 24 * 7)*/).toInt()
+                //val calCompare = Calendar.getInstance()
+                when(periodId){
+                    1-> calDate.add(Calendar.DAY_OF_YEAR, days)
+                    2-> calDate.add(Calendar.WEEK_OF_YEAR, weeks)
+                    3-> calDate.add(Calendar.MONTH, months)
+                    4-> calDate.add(Calendar.YEAR, years)
+                }
+                if(today.timeInMillis==calDate.timeInMillis)
+                    tf=true
+
+                //Log.d("DateUtil isPeriod", "startDateTime = $startDateTime nowDateTime = $nowDateTime difference = $difference")
+                Log.d("DateUtil isPeriod", "years = $years months = $months days = $days weeks = $weeks")
+                }
+            if(difference == 0L){
+                tf=true
+            }
+            Log.d("DateUtil isPeriod", "tf=$tf  today = ${getStrDateFromMils(today.timeInMillis)} calDate = ${getStrDateFromMils(calDate.timeInMillis)}")
+            return tf
         }
 
         /*fun getDateTimeFromString(strDate: String): Date {

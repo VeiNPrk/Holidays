@@ -1,7 +1,17 @@
 <resources>
 
-    <style name="AppTheme.NoActionBar">
+    <!--<style name="MyAppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="MyAppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">#ffff00</item>
+        <item name="colorAccent">#ffff00</item>
+        <item name="backgroundColor">#ffff00</item>-->
+        <!--<item name="titleTextStyle">@style/MyTitleTextStyle</item>-->
+        <!--<item name="android:toolbarStyle">ToolbarTitleTheme</item>-->
+    <!--</style>-->
 </resources>

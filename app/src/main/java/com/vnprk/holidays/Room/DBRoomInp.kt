@@ -9,7 +9,6 @@ import com.vnprk.holidays.models.*
 @Database(entities = [
     Holiday::class,
     PrivateEvent::class/*,
-    DetailNotNum::class,
     TypeDetail::class,
     FactoryDetail::class,
     ControlResult::class,
@@ -19,14 +18,14 @@ import com.vnprk.holidays.models.*
     Steel::class,
     MethodNkType::class,
     DefectDetectorType::class*/
-], version = 1)
+], version = 2)
 abstract class DBRoomInp : RoomDatabase() {
     abstract fun inpDao(): DaoInp
 }
-/*
+
 val MIGRATION_1_2 = object : Migration(1, 2) {
     override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE FactoryDetail ADD COLUMN startYear INTEGER")
-        database.execSQL("ALTER TABLE FactoryDetail ADD COLUMN endYear INTEGER")
+        database.execSQL("ALTER TABLE Holiday ADD COLUMN link TEXT")
+        //database.execSQL("ALTER TABLE FactoryDetail ADD COLUMN endYear INTEGER")
     }
-}*/
+}

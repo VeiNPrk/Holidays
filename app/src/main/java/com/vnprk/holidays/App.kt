@@ -9,16 +9,18 @@ import com.vnprk.holidays.di.DaggerApplicationComponent
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
 public class App : Application() {
 
     //private val instance: App
 
-    public val MAINURL_API="https://sert.pknk.ru"
+    val MAINURL_API="https://sert.pknk.ru"
     //private var database: DBRoomInp? = null
-    //private var repository: Repository? = null
-    private lateinit var retrofit : Retrofit
-    private lateinit var inpApi:InpApi
+    @Inject
+    lateinit var repository : Repository
+    /*private lateinit var retrofit : Retrofit
+    private lateinit var inpApi:InpApi*/
 
     companion object {
         lateinit var instance: App
@@ -41,16 +43,18 @@ public class App : Application() {
             .applicationContext(applicationContext)
             .build()
         instance = this
+        appComponent.inject(this)
+
        /* database = Room.databaseBuilder(this, DBRoomInp::class.java, "database")
             //.addMigrations(MIGRATION_1_2)
             .build()*/
 
-        val gson = GsonBuilder().setLenient().create()
-        retrofit = Retrofit.Builder()
+        //val gson = GsonBuilder().setLenient().create()
+        /*retrofit = Retrofit.Builder()
                 .baseUrl(MAINURL_API)
                  .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
-        inpApi = retrofit.create(InpApi::class.java)
+        inpApi = retrofit.create(InpApi::class.java)*/
         //repository = Repository()
     }
 
@@ -58,6 +62,6 @@ public class App : Application() {
         return instance
     }
 
-    fun getApi() = inpApi
+    //fun getApi() = inpApi
 
 }

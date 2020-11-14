@@ -20,8 +20,9 @@ class Holiday(
     /*@ColumnInfo(name = "description_holiday")*/
     override var descript: String?,
     @SerializedName("img_link")
-    /*@ColumnInfo(name = "img_holiday")*/
     override var img: String?,
+    @SerializedName("link")
+    var link: String?,
     @SerializedName("type")
     override var type: Int,
     @SerializedName("country")
@@ -33,7 +34,9 @@ class Holiday(
     @SerializedName("day_of_year")
     var dayOfYear: Int?,
     @SerializedName("ordered")
-    var ordered: Int
+    var ordered: Int,
+    @SerializedName("is_alarm")
+    var isAlarm:Boolean = false
 ):Event/*(/*idEvent, nameEvent, descriptEvent, imgEvent*/)*/{
 
 }

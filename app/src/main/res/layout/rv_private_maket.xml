@@ -21,12 +21,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:clipToPadding="false"
         android:foreground="?android:attr/selectableItemBackground"
-        app:cardBackgroundColor="#FFFFFF"
+        app:cardBackgroundColor="@color/colorBackgroundItem"
         app:cardCornerRadius="15dp"
         app:cardElevation="10dp"
         app:cardPreventCornerOverlap="false"
@@ -47,7 +46,7 @@
                 android:visibility="@{adapterItem.value.img==null ?View.GONE : View.VISIBLE }"
                 app:srcCompat="@drawable/ic_menu_camera" />
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -59,35 +58,73 @@
                 android:paddingBottom="8dp">
 
                 <!-- Title, secondary and supporting text -->
+
                 <TextView
+                    android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
                     android:text="@{adapterItem.value.name!=null &amp;&amp; !adapterItem.value.name.empty ? adapterItem.value.name : @string/tv_event_name_null}"
                     android:textAppearance="?attr/textAppearanceHeadline5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:text="Заголовок" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/textView2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:text="@{adapterItem.value.getStrStartTime()}"
                     android:textAppearance="?attr/textAppearanceHeadline6"
                     android:textColor="?android:attr/textColorSecondary"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3"
                     tools:text="14:55" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/textView4"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:text="@{adapterItem.value.getFullStrFinishDateTime()}"
                     android:textAppearance="?attr/textAppearanceHeadline6"
                     android:textColor="?android:attr/textColorSecondary"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2"
                     tools:text="12:34" />
-            </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:scaleType="centerCrop"
+                    android:visibility="@{adapterItem.value.isActive ?View.INVISIBLE : View.VISIBLE }"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3"
+                    app:srcCompat="@drawable/ic_baseline_alarm_off_32"
+                    tools:ignore="VectorDrawableCompat" />
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:scaleType="centerCrop"
+                    android:visibility="@{adapterItem.value.isActive ?View.VISIBLE : View.INVISIBLE }"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3"
+                    app:srcCompat="@drawable/ic_baseline_alarm_on_32"
+                    tools:ignore="VectorDrawableCompat" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
@@ -95,10 +132,8 @@
                     style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
                     android:text="@string/rv_card_action_more"
-                    android:visibility="@{adapterItem.isVisibleMore ? View.VISIBLE : View.GONE }"
-                    />
+                    android:visibility="@{adapterItem.isVisibleMore ? View.VISIBLE : View.GONE }" />
                 <!--<com.google.android.material.button.MaterialButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

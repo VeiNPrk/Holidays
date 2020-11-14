@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:minHeight="500dp"
+        android:background="@color/colorBackgroundView"
         android:padding="16dp">
         <!-- Media -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -26,10 +27,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginRight="8dp"
             android:clickable="true"
+            app:backgroundTint="@color/colorAccent"
+            app:layout_constraintEnd_toStartOf="@+id/fab_delete"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_baseline_edit_32"
+            app:tint="@color/colorIcons"
+ />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:clickable="true"
+            app:backgroundTint="@color/colorAccent"
+            app:tint="@color/colorIcons"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_edit" />
+            app:srcCompat="@drawable/ic_baseline_delete_24"
+            tools:ignore="VectorDrawableCompat" />
 
         <ImageView
             android:id="@+id/imv_holiday"
@@ -54,17 +72,44 @@
             app:layout_constraintTop_toBottomOf="@+id/imv_holiday"
             tools:text="Название" />
 
-        <TextView
-            android:id="@+id/tv_date"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/layout_date"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@{viewModel.fullDateStrLiveData}"
-            android:textAppearance="?attr/textAppearanceHeadline6"
-            tools:text="1234g"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_name_holiday" />
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name_holiday"
+            tools:layout_editor_absoluteX="16dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                android:visibility="@{event.isActive ? View.GONE : View.VISIBLE}"
+                app:srcCompat="@drawable/ic_baseline_alarm_off_32"
+                tools:ignore="VectorDrawableCompat" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                android:visibility="@{event.isActive ? View.VISIBLE : View.GONE}"
+                app:srcCompat="@drawable/ic_baseline_alarm_on_32"
+                tools:ignore="VectorDrawableCompat" />
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:gravity="center_vertical"
+                android:text="@{viewModel.fullDateStrLiveData}"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                tools:text="1234g" />
+                </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/layout_period"
@@ -74,24 +119,86 @@
             android:clickable="true"
             android:focusable="true"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/tv_date"
+            app:layout_constraintTop_toBottomOf="@+id/layout_date"
             tools:layout_editor_absoluteX="16dp">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="fitCenter"
-                app:srcCompat="@android:drawable/ic_menu_rotate" />
+                app:srcCompat="@drawable/ic_outline_loop_24"
+                tools:ignore="VectorDrawableCompat" />
 
             <TextView
                 android:id="@+id/tv_name_period"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:gravity="center_vertical"
                 android:text="@{viewModel.periodNameValue}"
-                android:textAppearance="?attr/textAppearanceHeadline6" />
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                tools:text="1234g" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_notify_before"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/layout_period"
+            tools:layout_editor_absoluteX="16dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_baseline_alarm_32"
+                tools:ignore="VectorDrawableCompat"/>
+
+            <TextView
+                android:id="@+id/tv_name_notify"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:text="@{viewModel.notifyNameValue}"
+                tools:text="1234g"
+                android:textAppearance="?attr/textAppearanceHeadline6" />
+        </LinearLayout>
+        <!--<LinearLayout
+            android:id="@+id/layout_is_active"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/layout_notify_before"
+            tools:layout_editor_absoluteX="16dp">
+
+           <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:scaleType="fitCenter"
+               android:visibility="@{event.isActive ? View.GONE : View.VISIBLE}"
+                app:srcCompat="@android:drawable/presence_busy" />
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:scaleType="fitCenter"
+                android:visibility="@{event.isActive ? View.VISIBLE : View.GONE}"
+                app:srcCompat="@android:drawable/presence_online" />
+           <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{event.isActive ? @string/fr_view_private_active : @string/fr_view_private_not_active }"
+                android:textAppearance="?attr/textAppearanceHeadline6" />
+        </LinearLayout>-->
+        <!--<LinearLayout
             android:id="@+id/layout_notify_before"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -114,23 +221,22 @@
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.notifyNameValue}"
                 android:textAppearance="?attr/textAppearanceHeadline6" />
-        </LinearLayout>
-
+        </LinearLayout>-->
 
         <TextView
             android:id="@+id/tv_descript_holiday"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="9dp"
             android:text="@{event.descript}"
-            android:visibility="@{event.descript==null &amp;&amp; event.descript.empty ?View.GONE : View.VISIBLE }"
             android:textAlignment="textStart"
             android:textAppearance="?attr/textAppearanceBody2"
-            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="18sp"
+            android:visibility="@{event.descript==null &amp;&amp; event.descript.empty ?View.GONE : View.VISIBLE }"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout_notify_before"
-            tools:text="fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffsdf nn snhn hnfdjhsfnhndfhndfjjfds nn jn jndfhndf ndfndkndknd knkjn k nj ndk nknn j ndnkdndk dfndfhndhehnhoenhrenjrnjfdnjfn nj n n n jfn d nd njh nrenher nherne en en n n johnej nh hn" />
+            tools:text="dd ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffsdf nn snhn hnfdjhsfnhndfhndfjjfds nn jn jndfhndf ndfndkndknd knkjn k nj ndk nknn j ndnkdndk dfndfhndhehnhoenhrenjrnjfdnjfn nj n n n jfn d nd njh nrenher nherne en en n n johnej nh hn" />
 
         <LinearLayout
             android:id="@+id/layout_color"

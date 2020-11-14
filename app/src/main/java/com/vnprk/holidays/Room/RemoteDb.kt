@@ -6,7 +6,7 @@ import javax.inject.Inject
 class RemoteDb @Inject constructor(private val retrofit: InpApi) {
     //val retrofit = App.instance.getApi()
 
-    suspend fun getAllHolidays() = retrofit.getHolidays()
+    suspend fun getAllHolidays(versionDb:Int) = retrofit.getHolidays(versionDb)
 
     suspend fun getDbVersion() = retrofit.getDbVersion()
 /*

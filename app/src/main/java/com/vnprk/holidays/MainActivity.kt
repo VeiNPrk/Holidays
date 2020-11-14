@@ -1,25 +1,30 @@
 package com.vnprk.holidays
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.ui.*
 import com.google.android.material.navigation.NavigationView
 import com.idescout.sql.SqlScoutServer
 import com.vnprk.holidays.utils.DatePickerDlg
 import com.vnprk.holidays.utils.DateUtils
+import com.vnprk.holidays.utils.DeviceRebootReceiver
 import java.util.*
-
 import javax.inject.Inject
+
 
 class MainActivity : AppCompatActivity(), DatePickerDlg.OnDateCompleteListener {
 
@@ -32,7 +37,6 @@ class MainActivity : AppCompatActivity(), DatePickerDlg.OnDateCompleteListener {
         super.onCreate(savedInstanceState)
         App.instance.appComponent.inject(this)
         setContentView(R.layout.activity_main)
-        //setHasOptionsMenu(true)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         isTablet = resources.getBoolean(R.bool.isTablet)
@@ -45,27 +49,71 @@ class MainActivity : AppCompatActivity(), DatePickerDlg.OnDateCompleteListener {
         } else {
             appBarConfiguration = AppBarConfiguration(navController.graph)
         }
+        val receiver = ComponentName(applicationContext, DeviceRebootReceiver::class.java)
+
+        applicationContext.packageManager?.setComponentEnabledSetting(
+            receiver,
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            PackageManager.DONT_KILL_APP
+        )
         setupActionBarWithNavController(navController, appBarConfiguration)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         navView.setupWithNavController(navController)
         SqlScoutServer.create(this, getPackageName());
-
+        //toolbar.setS
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            //if(destination!=)
-            if(destination.id!=R.id.privateEventEditFragment)
-                /*toolbar.title = navController.currentDestination?.label
-            else*/
+            if(destination.id!=R.id.privateEventEditFragment && destination.id!=R.id.nav_fragment_settings)
                 toolbar.title = "${navController.currentDestination?.label} ${DateUtils.getStrNameDate(this, repository.getNowDateLong().value?:0)}"
         }
         repository.getNowDateLong().observe(this, Observer { nowDate ->
-            //activity?.title=DateUtils.getStrNameDate(requireContext(), nowDate)
             toolbar.title = "${navController.currentDestination?.label} ${DateUtils.getStrNameDate(this, nowDate)}"
         })
+        //isAppBlacklisted()
+    }
+
+    private fun isAppBlacklisted() {
+        //val pwrm = getSystemService(Context.POWER_SERVICE) as PowerManager
+        val name = packageName
+
+        val pm =
+            getSystemService(Context.POWER_SERVICE) as PowerManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!pm.isIgnoringBatteryOptimizations(packageName)) intent.action =
+                Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
+            else {
+                intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                intent.data = Uri.parse("package:$packageName")
+            }
+            startActivity(intent)
+            /*if(isXiaomi())
+                goXiaomiSetting()*/
+        }
+        /*return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            !pwrm.isIgnoringBatteryOptimizations(name)
+        } else {
+            false
+        }*/
+    }
+
+    public fun isXiaomi() :Boolean {
+        return Build.BRAND != null && Build.BRAND.toLowerCase().equals("xiaomi");
+    }
+
+    private fun goXiaomiSetting() {
+        showActivity("com.miui.securitycenter",
+            "com.miui.permcenter.autostart.AutoStartManagementActivity");
+    }
+
+    private fun showActivity(
+        packageName: String,
+        activityDir: String
+    ) {
+        val intent = Intent()
+        intent.component = ComponentName(packageName, activityDir)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
@@ -77,20 +125,15 @@ class MainActivity : AppCompatActivity(), DatePickerDlg.OnDateCompleteListener {
 
     override fun onOptionsItemSelected(item: MenuItem)=
         when (item.itemId) {
-        R.id.menu_settings -> {
-            // User chose the "Settings" item, show the app settings UI...
-            true
+        R.id.nav_fragment_settings -> {
+            val navController = findNavController(R.id.nav_host_fragment)
+            item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
         }
         R.id.action_menu_date -> {
-            //showDatePickerDialog(0)
-            // User chose the "Favorite" action, mark the current item
-            // as a favorite...
             getDateDialog(this).show(supportFragmentManager, "datePicker")
             true
         }
         else -> {
-            // If we got here, the user's action was not recognized.
-            // Invoke the superclass to handle it.
             super.onOptionsItemSelected(item)
         }
     }

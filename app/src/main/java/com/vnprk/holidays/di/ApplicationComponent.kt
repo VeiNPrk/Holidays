@@ -1,11 +1,14 @@
 package com.vnprk.holidays.di
 
 import android.content.Context
+import com.vnprk.holidays.App
 import com.vnprk.holidays.MainActivity
 import com.vnprk.holidays.models.HolidayWorker
+import com.vnprk.holidays.utils.AlarmRebootService
 import com.vnprk.holidays.utils.AlarmService
 //import com.vnprk.holidays.models.MyWorker
 import com.vnprk.holidays.viewmodels.*
+import com.vnprk.holidays.views.SettingsFragment
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -30,6 +33,9 @@ interface ApplicationComponent {
     fun inject(viewModel: HolidayViewModel)
     fun inject(viewModel: PrivateEventViewModel)
     fun inject(alarmService:AlarmService)
+    fun inject(alarmService: AlarmRebootService)
+    fun inject(settingsFragment: SettingsFragment)
+    fun inject(app:App)
     /*fun inject(viewModel: SplashScreenViewModel)
     fun inject(viewModel: RegistrationViewModel)
     fun inject(viewModel: DetailCastViewModel)

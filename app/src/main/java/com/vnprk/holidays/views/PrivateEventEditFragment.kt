@@ -1,8 +1,11 @@
 package com.vnprk.holidays.views
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -77,6 +80,7 @@ PeriodsDlg.OnPeriodListener, NotifysDlg.OnNotifyListener{
             showColorDialog()
         }
         binding.btnSaveEvent.setOnClickListener{
+            closeKeyBoard()
             viewModel.saveEvent()
         }
         return binding.root
@@ -115,7 +119,8 @@ PeriodsDlg.OnPeriodListener, NotifysDlg.OnNotifyListener{
                             val navController =
                                 activity?.let { it1 -> Navigation.findNavController(it1, R.id.nav_host_fragment) }
                             var action = PrivateEventEditFragmentDirections.actionPrivateEventEditFragmentToNavCelebrationPrivate()
-                            navController?.navigate(action)
+                            navController?.popBackStack()
+                            //navController?.navigate(action)
                         }
                         else
                             showMessage(state.msg)
@@ -128,17 +133,14 @@ PeriodsDlg.OnPeriodListener, NotifysDlg.OnNotifyListener{
                 }
             }
         })
-        /*val data = viewModel.periods.values.toMutableList()
-        val adapter = ArrayAdapter<String>(
-            context,
-            android.R.layout.simple_spinner_item,
-            data)
-            .also { adapter ->
-            // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
-            binding.spnPeriod.adapter = adapter
-        }*/
+    }
+
+    private fun closeKeyBoard() {
+        val view = activity?.currentFocus
+        if (view != null) {
+            val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
     private fun showPeriodsDialog(){

@@ -1,5 +1,7 @@
 package com.vnprk.holidays.models
 
+import android.R
+
 /*
 open class Event(
     open var idEvent: Int,
@@ -28,7 +30,7 @@ interface Event {
         const val HOLIDAY_TYPE_OTHER = 3
         const val PRIVATE_TYPE = 100
 
-        val HOLIDAY_TYPES = mapOf(HOLIDAY_TYPE_CEL to "Праздники", HOLIDAY_TYPE_COUNTRY to "Праздники России", HOLIDAY_TYPE_RELIGIOUS to "Православные праздники", HOLIDAY_TYPE_OTHER to "Разное")
+        val HOLIDAY_TYPES = mapOf(HOLIDAY_TYPE_CEL to "Праздники", HOLIDAY_TYPE_COUNTRY to "Национальные праздники", HOLIDAY_TYPE_RELIGIOUS to "Религиозные праздники", HOLIDAY_TYPE_OTHER to "Разное")
         val periods = mapOf(
             0 to "Не повторять",
             1 to "Каждый день",

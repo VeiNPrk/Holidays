@@ -11,19 +11,22 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.vnprk.holidays.R
 import com.vnprk.holidays.models.Event
 import com.vnprk.holidays.models.Status
-import com.vnprk.holidays.utils.EventsRecyclerAdapter
-import com.vnprk.holidays.utils.NetworkUtils
+import com.vnprk.holidays.utils.*
 import com.vnprk.holidays.utils.NetworkUtils.Companion.networkState
 import com.vnprk.holidays.viewmodels.MainViewModel
+import kotlinx.android.synthetic.main.fragment_main.view.*
 import kotlinx.android.synthetic.main.fragment_private_list.view.*
+import kotlinx.android.synthetic.main.fragment_private_list.view.tv_msg
 
 class MainFragment : Fragment(), EventsRecyclerAdapter.EventDetailClickListener, EventsRecyclerAdapter.EventMoreClickListener {
 
@@ -34,6 +37,32 @@ class MainFragment : Fragment(), EventsRecyclerAdapter.EventDetailClickListener,
     private lateinit var swipeLayout: SwipeRefreshLayout
     private lateinit var imvNoConnect: ImageView
     private lateinit var tvMessage: TextView
+    private lateinit var fab : FloatingActionButton
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        //activity?.intent.
+        activity?.intent?.extras?.let{
+            /*if(SharedPreferencesUtils.getBoolean(requireContext(), SharedPreferencesUtils.NAME_PREF_FROM_NOTIF)){
+                SharedPreferencesUtils.setBoolean(requireContext(), SharedPreferencesUtils.NAME_PREF_FROM_NOTIF, false)*/
+            if(it.getBoolean(AlarmUtils.FROM_NOTIF,false)){
+                activity?.intent?.removeExtra(AlarmUtils.FROM_NOTIF)
+
+                //it.ge
+                //it.putBoolean(AlarmBroadcastReceiver.FROM_NOTIF, false)
+                val idEvent = it.getInt(AlarmUtils.ID_EVENT, 0)
+                val typeEvent = it.getInt(AlarmUtils.TYPE_EVENT,-1)
+                onMoreClick(typeEvent)
+                onDetailClick(idEvent, typeEvent)
+
+            }
+        }
+    }
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -52,6 +81,13 @@ class MainFragment : Fragment(), EventsRecyclerAdapter.EventDetailClickListener,
             viewModel.onRefreshLayout()
             //viewModel.refreshData(myUserId, myEntId)
         }
+        fab = root.fab_add_event_main
+        fab.setOnClickListener(View.OnClickListener {
+            val navController =
+                activity?.let { it1 -> Navigation.findNavController(it1, R.id.nav_host_fragment) }
+            val action = MainFragmentDirections.actionNavHomeToPrivateEventEditFragment()
+            navController?.navigate(action)
+        })
         setRecyclerView()
         networkState.observe(viewLifecycleOwner, Observer { nState ->
             networkState.let {
@@ -101,7 +137,7 @@ class MainFragment : Fragment(), EventsRecyclerAdapter.EventDetailClickListener,
         /*viewModel.getTest2().observe(viewLifecycleOwner, Observer {
             mAdapter.setDetailsData(it)
         })*/
-        viewModel.refreshData()
+        //viewModel.refreshData()
         return root
     }
 
@@ -109,7 +145,7 @@ class MainFragment : Fragment(), EventsRecyclerAdapter.EventDetailClickListener,
         val mLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         //val maket = viewModel.getRvMaket(typeDetail)
         mAdapter = //viewModel.getRvAdapter(typeDetail, this)//
-            context?.let { EventsRecyclerAdapter(this, this) }!!
+            context?.let { EventsRecyclerAdapter(requireContext(),this, this) }!!
         rv.setHasFixedSize(true)
         rv.layoutManager = mLayoutManager
         rv.adapter = mAdapter

@@ -10,14 +10,31 @@
 
     <string name="menu_home">Главная</string>
     <string name="menu_celebration">Праздники</string>
-    <string name="menu_celebration_country">Праздники России</string>
-    <string name="menu_celebration_religious">Православные праздники</string>
+    <string name="menu_celebration_country">Национальные праздники</string>
+    <string name="menu_celebration_religious">Религиозные праздники</string>
     <string name="menu_celebration_other">Разное</string>
     <string name="menu_celebration_private">Личные</string>
+    <string name="menu_settings">Настройки</string>
+
+    <string name="setting_inner_repeat_tittle">Частота повтора</string>
+    <string name="setting_inner_repeat_summary">Каждые:</string>
+    <string name="setting_inner_repeat_dialog_tittle">Выберите значение</string>
+    <string name="setting_notify_holiday_types_tittle">Уведомлять о праздниках</string>
+    <string name="setting_notify_holiday_types_summary">Выбрано:</string>
+    <string name="setting_notify_holiday_types_dialog_tittle">Типы праздников</string>
+    <string name="setting_notify_holiday_types_summary_def">Нажмите для выбора</string>
+    <string name="setting_notify_holiday_time_tittle">Время уведомления</string>
+    <string name="setting_notify_holiday_time_summary">Начало:</string>
+    <string name="setting_notify_holiday_time_dialog_tittle">Выберите время</string>
+    <string name="setting_notify_holiday_time_summary_def">Нажмите для выбора</string>
 
     <string name="no_first_connection">Для первоначальной загрузки необходимо интернет соединение!</string>
     <string name="no_have_celebrate">Праздников нет</string>
+    <string name="no_have_private">Событий нет</string>
     <string name="home_second">Home Second</string>
+
+    <string name="fr_edit_private_btn_save">Сохранить</string>
+    <string name="fr_edit_colordlg_tittle">Выберите цвет</string>
 
     <string name="rv_card_action_more">Ещё</string>
 
@@ -26,4 +43,12 @@
     <string name="fcm_message">TestNotify</string>
     <string name="fcm_notify_tittle">АРМ НК</string>
     <string name="bar_today">Сегодня</string>
+
+    <string name="fr_view_private_active">Активно</string>
+    <string name="fr_view_private_not_active">Не активно</string>
+
+    <string name="dlg_confirm_delete_tittle">Удалить событие?</string>
+    <string name="dlg_confirm_delete_ok">Удалить</string>
+    <string name="dlg_confirm_delete_cancel">Отмена</string>
+    <string name="notification_action_btn_cancel">Отмена</string>
 </resources>
