@@ -41,7 +41,7 @@ class CelebrationViewFragment : BottomSheetDialogFragment() {
             val d = dialog as BottomSheetDialog
             /*val coordinatorLayout =
                 d.findViewById<View>(R.id.locUXCoordinatorLayout) as CoordinatorLayout?*/
-            val bottomSheetInternal = d!!.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val bottomSheetInternal = d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
             val bottomSheetBehavior: BottomSheetBehavior<*> =
                 BottomSheetBehavior.from<View>(bottomSheetInternal)
             // val bottomSheetInternal = d.findViewById<View>(R.id.locUXView)

@@ -53,10 +53,7 @@ class PrivateListFragment : Fragment() , EventsRecyclerAdapter.EventDetailClickL
         }
         fab = root.fab_add_event
         fab.setOnClickListener(View.OnClickListener {
-            val navController =
-                activity?.let { it1 -> Navigation.findNavController(it1, R.id.nav_host_fragment) }
-            val action = PrivateListFragmentDirections.actionNavCelebrationPrivateToPrivateEventEditFragment()
-            findNavController().navigate(action)
+            findNavController().navigate(PrivateListFragmentDirections.actionNavCelebrationPrivateToPrivateEventEditFragment())
             //navController?.navigate(action)
         })
         setRecyclerView()

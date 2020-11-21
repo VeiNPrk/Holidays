@@ -18,7 +18,7 @@ class EventsRecyclerAdapter(val context:Context, val detailClickListener: EventD
     var data:List<AdapterItem<Event>> = ArrayList<AdapterItem<Event>>()
 
     interface EventDetailClickListener {
-        fun onDetailClick(idDetail : Int, type : Int)
+        fun onDetailClick(idEvent : Int, type : Int)
         //void onDeleteClick(PictureClass picture);
     }
 

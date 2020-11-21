@@ -56,12 +56,12 @@ class PrivateEventViewFragment : BottomSheetDialogFragment() {
             val builder = AlertDialog.Builder(requireContext())
             builder.setTitle(R.string.dlg_confirm_delete_tittle)
                 .setPositiveButton(R.string.dlg_confirm_delete_ok,
-                    DialogInterface.OnClickListener { dialog, id ->
+                    DialogInterface.OnClickListener { _, _ ->
                         viewModel.deletePrivateEvent(requireContext())
                         dismiss()
                     })
                 .setNegativeButton(R.string.dlg_confirm_delete_cancel,
-                    DialogInterface.OnClickListener { dialog, id ->
+                    DialogInterface.OnClickListener { _, _ ->
                     })
             builder.show()
         }
