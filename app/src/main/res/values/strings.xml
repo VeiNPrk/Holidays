@@ -7,6 +7,8 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Настройки</string>
     <string name="action_date">Дата</string>
+    <string name="nav_private_fragment_label">Личное событие</string>
+    <string name="nav_celebrate_fragment_label">Cобытие</string>
 
     <string name="menu_home">Главная</string>
     <string name="menu_celebration">Праздники</string>

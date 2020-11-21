@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -24,12 +25,13 @@ import kotlinx.android.synthetic.main.rv_holiday_maket.view.*
 
 class CelebrationViewFragment : BottomSheetDialogFragment() {
 
-    var idHoliday = 0
-    lateinit var binding: FragmentHolidayBinding
+    private var idHoliday = 0
+    private lateinit var binding: FragmentHolidayBinding
     private val viewModel: HolidayViewModel by activityViewModels()
+    private val args :CelebrationViewFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        idHoliday = arguments?.getInt(KEY_ID_HOLIDAY, 0)!!
+        idHoliday = args.idEvent//arguments?.getInt(KEY_ID_HOLIDAY, 0)!!
         super.onCreate(savedInstanceState)
     }
 
@@ -87,17 +89,6 @@ class CelebrationViewFragment : BottomSheetDialogFragment() {
         val intent = Intent(Intent.ACTION_VIEW, webpage)
         if (intent.resolveActivity(requireActivity().packageManager) != null) {
             startActivity(intent)
-        }
-    }
-
-    companion object {
-        const val KEY_ID_HOLIDAY = "id_holiday_key"
-        fun newInstance(idHoliday:Int): CelebrationViewFragment {
-            val myFragment = CelebrationViewFragment()
-            val args = Bundle()
-            args.putInt(KEY_ID_HOLIDAY, idHoliday)
-            myFragment.arguments = args
-            return myFragment
         }
     }
 }

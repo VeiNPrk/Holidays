@@ -32,6 +32,12 @@
                 android:name="idEvent"
                 android:defaultValue="0" />
         </action>
+        <action
+            android:id="@+id/action_nav_home_to_privateEventViewFragment"
+            app:destination="@id/privateEventViewFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_celebrationViewFragment"
+            app:destination="@id/celebrationViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/nav_celebration"
@@ -42,6 +48,9 @@
             android:name="typeCelebrate"
             app:argType="integer"
             android:defaultValue="0" />
+        <action
+            android:id="@+id/action_nav_celebration_to_celebrationViewFragment"
+            app:destination="@id/celebrationViewFragment" />
     </fragment>
 
     <fragment
@@ -53,6 +62,9 @@
             android:name="typeCelebrate"
             app:argType="integer"
             android:defaultValue="1" />
+        <action
+            android:id="@+id/action_nav_celebration_country_to_celebrationViewFragment"
+            app:destination="@id/celebrationViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/nav_celebration_religious"
@@ -63,6 +75,9 @@
             android:name="typeCelebrate"
             app:argType="integer"
             android:defaultValue="2" />
+        <action
+            android:id="@+id/action_nav_celebration_religious_to_celebrationViewFragment"
+            app:destination="@id/celebrationViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/nav_celebration_other"
@@ -73,6 +88,9 @@
             android:name="typeCelebrate"
             app:argType="integer"
             android:defaultValue="3" />
+        <action
+            android:id="@+id/action_nav_celebration_other_to_celebrationViewFragment"
+            app:destination="@id/celebrationViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/nav_celebration_private"
@@ -86,11 +104,14 @@
                 android:name="idEvent"
                 android:defaultValue="0" />
         </action>
+        <action
+            android:id="@+id/action_nav_celebration_private_to_privateEventViewFragment"
+            app:destination="@id/privateEventViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/privateEventEditFragment"
         android:name="com.vnprk.holidays.views.PrivateEventEditFragment"
-        android:label="Личное событие" >
+        android:label="@string/nav_private_fragment_label" >
         <action
             android:id="@+id/action_privateEventEditFragment_to_nav_celebration_private"
             app:destination="@id/nav_celebration_private" />
@@ -103,4 +124,25 @@
         android:id="@+id/nav_fragment_settings"
         android:name="com.vnprk.holidays.views.SettingsFragment"
         android:label="@string/menu_settings" />
+    <dialog
+        android:id="@+id/privateEventViewFragment"
+        android:name="com.vnprk.holidays.views.PrivateEventViewFragment"
+        android:label="@string/nav_private_fragment_label" >
+        <action
+            android:id="@+id/action_privateEventViewFragment_to_privateEventEditFragment"
+            app:destination="@id/privateEventEditFragment" />
+        <argument
+            android:name="idEvent"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </dialog>
+    <dialog
+        android:id="@+id/celebrationViewFragment"
+        android:name="com.vnprk.holidays.views.CelebrationViewFragment"
+        android:label="@string/nav_celebrate_fragment_label" >
+        <argument
+            android:name="idEvent"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </dialog>
 </navigation>

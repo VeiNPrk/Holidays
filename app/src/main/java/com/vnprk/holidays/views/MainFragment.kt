@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -153,9 +154,10 @@ class MainFragment : Fragment(), EventsRecyclerAdapter.EventDetailClickListener,
     }
 
     override fun onDetailClick(idEvent: Int, type:Int) {
-        val bottomDialogFragment = if(type == Event.PRIVATE_TYPE){
+        /*val bottomDialogFragment = */if(type == Event.PRIVATE_TYPE){
             //val addPhotoBottomDialogFragment: PrivateEventViewFragment =
-                PrivateEventViewFragment.newInstance(idEvent)
+                //PrivateEventViewFragment.newInstance(idEvent)
+            findNavController().navigate(MainFragmentDirections.actionNavHomeToPrivateEventViewFragment(idEvent))
             /*addPhotoBottomDialogFragment.show(
                 parentFragmentManager,
                 "ActionBottomDialog"
@@ -163,17 +165,18 @@ class MainFragment : Fragment(), EventsRecyclerAdapter.EventDetailClickListener,
         }
         else{
             //val addPhotoBottomDialogFragment: CelebrationViewFragment =
-                CelebrationViewFragment.newInstance(idEvent)
+            findNavController().navigate(MainFragmentDirections.actionNavHomeToCelebrationViewFragment(idEvent))
+            //CelebrationViewFragment.newInstance(idEvent)
             /*addPhotoBottomDialogFragment.show(
                 parentFragmentManager,
                 "ActionBottomDialog"
             )*/
         }
-        bottomDialogFragment
+        /*bottomDialogFragment
         bottomDialogFragment.show(
             parentFragmentManager,
             "ActionBottomDialog"
-        )
+        )*/
     }
 
     override fun onMoreClick(type: Int) {

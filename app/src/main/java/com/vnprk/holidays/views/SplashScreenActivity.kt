@@ -100,11 +100,13 @@ class SplashScreenActivity : AppCompatActivity(){
     }
 
     fun refreshData(){
-        initHolidayData()
+
         if(SharedPreferencesUtils.getVersionDb(this)==0){
+            initHolidayData()
             if(!NetworkUtils.isNetworkAvailable(this))
                 NetworkUtils.networkState.postValue(LoadingState(Status.FAILED, NetworkUtils.ERROR_NO_CONNECTION))
         } else{
+            //initHolidayData()
             goToWork()
             //NetworkUtils.networkState.postValue(LoadingState(Status.FAILED, NetworkUtils.ERROR_NO_CONNECTION))
         }

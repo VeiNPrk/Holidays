@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="holiday_fragment_height">550dp</dimen>
+    <dimen name="holiday_fragment_img_minheight">200dp</dimen>
+</resources>

@@ -12,18 +12,21 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:minHeight="500dp"
+        android:layout_height="@dimen/holiday_fragment_height"
         android:background="@color/colorBackgroundView"
+        android:minHeight="@dimen/holiday_fragment_height"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="8dp">
         <!-- Media -->
         <ImageView
             android:id="@+id/imv_holiday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:minHeight="200dp"
+            android:layout_marginTop="8dp"
+            android:minHeight="@dimen/holiday_fragment_img_minheight"
             android:scaleType="fitCenter"
             android:visibility="@{holiday.img==null ?View.GONE : View.VISIBLE }"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,7 +38,8 @@
             android:id="@+id/linearLayout5"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="29dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/imv_open_link"
             app:layout_constraintEnd_toEndOf="parent"
@@ -47,7 +51,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{holiday.name}"
-                android:textAppearance="?attr/textAppearanceHeadline6" />
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                tools:text="день борьбы с чем нибудь когда нибудь" />
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -70,6 +75,7 @@
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
         </LinearLayout>
+
         <ImageView
             android:id="@+id/imv_open_link"
             android:layout_width="wrap_content"

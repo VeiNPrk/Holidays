@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -55,7 +56,8 @@ class PrivateListFragment : Fragment() , EventsRecyclerAdapter.EventDetailClickL
             val navController =
                 activity?.let { it1 -> Navigation.findNavController(it1, R.id.nav_host_fragment) }
             val action = PrivateListFragmentDirections.actionNavCelebrationPrivateToPrivateEventEditFragment()
-            navController?.navigate(action)
+            findNavController().navigate(action)
+            //navController?.navigate(action)
         })
         setRecyclerView()
         viewModel.getPrivateEvents().observe(viewLifecycleOwner, Observer {
@@ -82,12 +84,13 @@ class PrivateListFragment : Fragment() , EventsRecyclerAdapter.EventDetailClickL
     }
 
     override fun onDetailClick(idEvent: Int, type:Int) {
-        val bottomDialogFragment =
+        findNavController().navigate(PrivateListFragmentDirections.actionNavCelebrationPrivateToPrivateEventViewFragment(idEvent))
+        /*val bottomDialogFragment =
             PrivateEventViewFragment.newInstance(idEvent)
         bottomDialogFragment
         bottomDialogFragment.show(
             parentFragmentManager,
             "ActionBottomDialog"
-        )
+        )*/
     }
 }

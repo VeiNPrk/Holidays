@@ -146,6 +146,6 @@ class MainActivity : AppCompatActivity(), DatePickerDlg.OnDateCompleteListener {
 
     override fun onDateComplete(time: Calendar, viewCode: Int) {
         repository.setNowDate(time.timeInMillis)
-        title="1234"
+        //title="1234"
     }
 }

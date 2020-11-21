@@ -11,6 +11,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -46,10 +48,12 @@ class CelebrationListFragment : Fragment(), EventsRecyclerAdapter.EventDetailCli
     ): View? {
         val root = inflater.inflate(R.layout.fragment_celebration_list, container, false)
         tvMessage = root.tv_msg
-        var type: Int = -1
-        if (arguments != null) {
+        val args : CelebrationListFragmentArgs by navArgs()
+        //var type: Int = -1
+
+        /*if (arguments != null) {
             type = arguments?.getInt("typeCelebrate", -1)!!
-        }
+        }*/
 
         rv = root.findViewById(R.id.rv_holiday_events)
         swipeLayout = root.findViewById(R.id.swipe_refresh_layout)
@@ -84,7 +88,7 @@ class CelebrationListFragment : Fragment(), EventsRecyclerAdapter.EventDetailCli
                 }
             }
         })
-        viewModel.getEventByType(type).observe(viewLifecycleOwner, Observer {
+        viewModel.getEventByType(args.typeCelebrate).observe(viewLifecycleOwner, Observer {
             swipeLayout.isRefreshing=false
             mAdapter.setDetailsData(it)
             if(it.isEmpty())
@@ -133,13 +137,16 @@ class CelebrationListFragment : Fragment(), EventsRecyclerAdapter.EventDetailCli
     }*/
 
     override fun onDetailClick(idEvent: Int, type:Int) {
-        val bottomDialogFragment =
+        val bundleToTransfer = Bundle()
+        bundleToTransfer.putInt("idEvent", idEvent)
+        findNavController().navigate(R.id.celebrationViewFragment, bundleToTransfer)
+        /*val bottomDialogFragment =
             CelebrationViewFragment.newInstance(idEvent)
         bottomDialogFragment
         bottomDialogFragment.show(
             parentFragmentManager,
             "ActionBottomDialog"
-        )
+        )*/
     }
 
     override fun onStop() {
