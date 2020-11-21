@@ -18,7 +18,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "SERVER_URL", "\"https://sert.pknk.ru/service/\"")
     }
 
     buildTypes {
