@@ -22,7 +22,6 @@ import com.vnprk.holidays.viewmodels.HolidayViewModel
 import com.vnprk.holidays.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.rv_holiday_maket.view.*
 
-
 class CelebrationViewFragment : BottomSheetDialogFragment() {
 
     private var idHoliday = 0

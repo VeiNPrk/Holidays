@@ -21,9 +21,7 @@ import com.vnprk.holidays.R
 import com.vnprk.holidays.databinding.FragmentViewPrivateBinding
 import com.vnprk.holidays.viewmodels.PrivateEventViewModel
 
-
 class PrivateEventViewFragment : BottomSheetDialogFragment() {
-
     private var idEvent = 0
     lateinit var binding: FragmentViewPrivateBinding
     private val viewModel: PrivateEventViewModel by viewModels()
@@ -51,13 +49,6 @@ class PrivateEventViewFragment : BottomSheetDialogFragment() {
         binding.setVariable(BR.viewModel, viewModel)
         binding.executePendingBindings()
         binding.fabEdit.setOnClickListener {
-            /*val navController =
-                activity?.let { it1 -> Navigation.findNavController(it1, R.id.nav_host_fragment) }*/
-            /*var action = PrivateListFragmentDirections.actionNavCelebrationPrivateToPrivateEventEditFragment(idEvent)
-            navController?.navigate(action)*/
-            //val bundleToTransfer = Bundle()
-            //bundleToTransfer.putInt("key_id_event", idEvent)
-            //findNavController().navigate(R.id.privateEventEditFragment, bundleToTransfer)
             findNavController().navigate(PrivateEventViewFragmentDirections.actionPrivateEventViewFragmentToPrivateEventEditFragment(idEvent))
             dismiss()
         }

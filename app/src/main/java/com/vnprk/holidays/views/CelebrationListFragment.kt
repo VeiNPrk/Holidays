@@ -3,7 +3,6 @@ package com.vnprk.holidays.views
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -19,13 +18,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.vnprk.holidays.R
 import com.vnprk.holidays.models.Status
-import com.vnprk.holidays.utils.DatePickerDlg
-import com.vnprk.holidays.utils.DateUtils
 import com.vnprk.holidays.utils.EventsRecyclerAdapter
 import com.vnprk.holidays.utils.NetworkUtils
 import com.vnprk.holidays.viewmodels.CelebrationListViewModel
 import kotlinx.android.synthetic.main.fragment_private_list.view.*
-import java.util.*
 
 class CelebrationListFragment : Fragment(), EventsRecyclerAdapter.EventDetailClickListener {
 
@@ -49,12 +45,6 @@ class CelebrationListFragment : Fragment(), EventsRecyclerAdapter.EventDetailCli
         val root = inflater.inflate(R.layout.fragment_celebration_list, container, false)
         tvMessage = root.tv_msg
         val args : CelebrationListFragmentArgs by navArgs()
-        //var type: Int = -1
-
-        /*if (arguments != null) {
-            type = arguments?.getInt("typeCelebrate", -1)!!
-        }*/
-
         rv = root.findViewById(R.id.rv_holiday_events)
         swipeLayout = root.findViewById(R.id.swipe_refresh_layout)
         swipeLayout.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
@@ -69,7 +59,6 @@ class CelebrationListFragment : Fragment(), EventsRecyclerAdapter.EventDetailCli
             viewModel.getLiveDataNowDate().observe(viewLifecycleOwner, Observer { nowDate ->
                 //activity?.title=DateUtils.getStrNameDate(requireContext(), nowDate)
             })
-        //viewModel.setDateEvent(requireContext(), Calendar.getInstance())
         NetworkUtils.networkState.observe(viewLifecycleOwner, Observer { nState ->
             NetworkUtils.networkState.let {
                 when (nState.status) {
@@ -111,51 +100,13 @@ class CelebrationListFragment : Fragment(), EventsRecyclerAdapter.EventDetailCli
         rv.itemAnimator = DefaultItemAnimator()
     }
 
-    /*override fun onOptionsItemSelected(item: MenuItem)=
-    when (item.itemId) {
-        R.id.action_settings -> {
-            // User chose the "Settings" item, show the app settings UI...
-            true
-        }
-
-        R.id.action_date -> {
-            showDatePickerDialog(0)
-            // User chose the "Favorite" action, mark the current item
-            // as a favorite...
-            true
-        }
-
-        else -> {
-            // If we got here, the user's action was not recognized.
-            // Invoke the superclass to handle it.
-            super.onOptionsItemSelected(item)
-        }
-    }*/
-
-    /*private fun showDatePickerDialog(/*date: Long, */viewCode:Int) {
-        viewModel.getDateDialog(this).show(parentFragmentManager, "datePicker")
-    }*/
-
     override fun onDetailClick(idEvent: Int, type:Int) {
         val bundleToTransfer = Bundle()
         bundleToTransfer.putInt("idEvent", idEvent)
         findNavController().navigate(R.id.celebrationViewFragment, bundleToTransfer)
-        /*val bottomDialogFragment =
-            CelebrationViewFragment.newInstance(idEvent)
-        bottomDialogFragment
-        bottomDialogFragment.show(
-            parentFragmentManager,
-            "ActionBottomDialog"
-        )*/
     }
 
     override fun onStop() {
-        //viewModel.getLiveDataNowDate().obser
         super.onStop()
     }
-
-    /*
-    override fun onDateComplete(time: Calendar, viewCode: Int) {
-        viewModel.setDateEvent(time)
-    }*/
 }

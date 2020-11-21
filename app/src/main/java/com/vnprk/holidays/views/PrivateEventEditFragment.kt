@@ -5,12 +5,10 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
@@ -24,7 +22,6 @@ import com.vnprk.holidays.utils.PeriodsDlg
 import com.vnprk.holidays.utils.TimePickerDlg
 import com.vnprk.holidays.viewmodels.PrivateEventViewModel
 import java.util.*
-
 
 class PrivateEventEditFragment : Fragment(), DatePickerDlg.OnDateCompleteListener, TimePickerDlg.OnTimeCompleteListener,
 PeriodsDlg.OnPeriodListener, NotifysDlg.OnNotifyListener{

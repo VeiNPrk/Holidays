@@ -85,12 +85,5 @@ class PrivateListFragment : Fragment() , EventsRecyclerAdapter.EventDetailClickL
 
     override fun onDetailClick(idEvent: Int, type:Int) {
         findNavController().navigate(PrivateListFragmentDirections.actionNavCelebrationPrivateToPrivateEventViewFragment(idEvent))
-        /*val bottomDialogFragment =
-            PrivateEventViewFragment.newInstance(idEvent)
-        bottomDialogFragment
-        bottomDialogFragment.show(
-            parentFragmentManager,
-            "ActionBottomDialog"
-        )*/
     }
 }

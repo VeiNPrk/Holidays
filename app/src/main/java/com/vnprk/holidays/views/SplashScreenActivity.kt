@@ -21,8 +21,6 @@ import java.util.concurrent.TimeUnit
 class SplashScreenActivity : AppCompatActivity(){
 
     private val TAG = "SplashScreenActivity"
-    //private var repository = App.instance.getRepository()
-    //lateinit var viewModel: SplashScreenViewModel
     lateinit var binding : ActivitySplashScreenBinding
     var token:String=""
     var message = ""
@@ -39,10 +37,6 @@ class SplashScreenActivity : AppCompatActivity(){
         workManager.pruneWork()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash_screen)
         binding.lifecycleOwner=this
-        //viewModel = ViewModelProviders.of(this)[SplashScreenViewModel::class.java]
-        //repository = App.instance.getRepository()!!
-        //viewModel.setLifecycle(this)
-        //token = SharedPreferencesUtils.getString(this, SharedPreferencesUtils.NAME_PREF_TOKEN)
         Log.e(TAG, token)
 
         NetworkUtils.networkState.observe(this, Observer { networkState ->
@@ -73,44 +67,18 @@ class SplashScreenActivity : AppCompatActivity(){
             }
             binding.setVariable(BR.view, this)
             binding.executePendingBindings()
-            //viewModel.observeNetworkState(networkState)
         })
         refreshData()
-                
-        /*viewModel.eventLiveData.observe(this, Observer { event ->
-            when (event.event) {
-                Event.ACTION -> {
-                    if(event.msg.equals(viewModel.ACTION_GO_TO_REGISTRATION))
-                        goToRegistration()
-                    if(event.msg.equals(viewModel.ACTION_GO_TO_WORK))
-                        goToWork()
-                }
-                Event.ERROR -> {
-                    if(event.msg.equals(NetworkUtils.ERROR_NO_CONNECTION)) {
-                        binding.setVariable(BR.viewModel, viewModel)
-                        binding.executePendingBindings()
-                    }
-                    //goToRegistration()
-                }
-                else -> {
-                    print("")
-                }
-            }
-        })*/
     }
 
     fun refreshData(){
-
         if(SharedPreferencesUtils.getVersionDb(this)==0){
             initHolidayData()
             if(!NetworkUtils.isNetworkAvailable(this))
                 NetworkUtils.networkState.postValue(LoadingState(Status.FAILED, NetworkUtils.ERROR_NO_CONNECTION))
         } else{
-            //initHolidayData()
             goToWork()
-            //NetworkUtils.networkState.postValue(LoadingState(Status.FAILED, NetworkUtils.ERROR_NO_CONNECTION))
         }
-
     }
 
     private fun initHolidayData(){
